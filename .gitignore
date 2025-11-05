@@ -22,3 +22,6 @@ Thumbs.db
 
 # Optional
 coverage/
+
+# Ignore README while it's being worked on
+README.md

@@ -16,6 +16,8 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     actionTimeout: 10000,
     trace: 'on-first-retry',
+    // Allow overriding the site under test via env var
+    baseURL: process.env.BASE_URL || 'https://www.mytheresa.com',
   },
   projects: [
     {
