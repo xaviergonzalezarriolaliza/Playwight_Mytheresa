@@ -375,7 +375,7 @@ Playwight_Mytheresa/
 
 ## Author
 
-Xavier Gonzalez Arriola Liza  
+"><4v¡ Gonzale Arriola  
 Email: xavier.gonzalez.arriola.liza@gmail.com  
 GitHub: [@xaviergonzalezarriolaliza](https://github.com/xaviergonzalezarriolaliza)
 

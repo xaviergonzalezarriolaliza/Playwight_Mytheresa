@@ -1,0 +1,355 @@
+import { test, expect } from '@playwright/test';
+
+test.describe('Test Case 5: Additional Bug Detection', () => {
+  
+  test('5.1 Detect failed network requests (4xx/5xx)', async ({ page }) => {
+    const failedRequests: { url: string; status: number; statusText: string }[] = [];
+    
+    // Listen for failed requests
+    page.on('response', (response) => {
+      const status = response.status();
+      if (status >= 400) {
+        failedRequests.push({
+          url: response.url(),
+          status: status,
+          statusText: response.statusText()
+        });
+      }
+    });
+
+    await page.goto('/');
+    
+    // Navigate to different pages to check for failed requests
+    await page.click('a[href*="about"]').catch(() => {});
+    await page.waitForLoadState('networkidle');
+    
+    await page.goto('/');
+    await page.click('a[href*="products"]').catch(() => {});
+    await page.waitForLoadState('networkidle');
+
+    console.log('\n=== Failed Network Requests ===');
+    if (failedRequests.length > 0) {
+      failedRequests.forEach(req => {
+        console.log(`❌ ${req.status} ${req.statusText}: ${req.url}`);
+      });
+    } else {
+      console.log('✅ No failed network requests detected');
+    }
+
+    // Report but don't fail test - document the issues
+    if (failedRequests.length > 0) {
+      console.log(`\n⚠️  Found ${failedRequests.length} failed request(s)`);
+    }
+  });
+
+  test('5.2 Detect broken images', async ({ page }) => {
+    await page.goto('/');
+    
+    const brokenImages = await page.evaluate(() => {
+      const images = Array.from(document.querySelectorAll('img'));
+      const broken: { src: string; alt: string }[] = [];
+      
+      images.forEach(img => {
+        if (!img.complete || img.naturalWidth === 0) {
+          broken.push({
+            src: img.src,
+            alt: img.alt || '(no alt text)'
+          });
+        }
+      });
+      
+      return broken;
+    });
+
+    console.log('\n=== Broken Images Check ===');
+    if (brokenImages.length > 0) {
+      console.log(`❌ Found ${brokenImages.length} broken image(s):`);
+      brokenImages.forEach(img => {
+        console.log(`   - ${img.src}`);
+        console.log(`     Alt: ${img.alt}`);
+      });
+    } else {
+      console.log('✅ All images loaded successfully');
+    }
+
+    // Document the issue
+    if (brokenImages.length > 0) {
+      console.log(`\n⚠️  Image loading issues detected`);
+    }
+  });
+
+  test('5.3 Detect JavaScript runtime errors on all pages', async ({ page }) => {
+    const jsErrors: { message: string; page: string }[] = [];
+    
+    page.on('pageerror', (error) => {
+      jsErrors.push({
+        message: error.message,
+        page: page.url()
+      });
+    });
+
+    // Test multiple pages
+    const pagesToTest = [
+      { name: 'Homepage', path: '/' },
+      { name: 'About', selector: 'a[href*="about"]' },
+      { name: 'Products', selector: 'a[href*="products"]' },
+      { name: 'Contact', selector: 'a[href*="contact"]' },
+    ];
+
+    for (const pageInfo of pagesToTest) {
+      if (pageInfo.path) {
+        await page.goto(pageInfo.path);
+      } else if (pageInfo.selector) {
+        await page.goto('/');
+        await page.click(pageInfo.selector).catch(() => {});
+      }
+      await page.waitForLoadState('domcontentloaded');
+      await page.waitForTimeout(500); // Let JS execute
+    }
+
+    console.log('\n=== JavaScript Runtime Errors ===');
+    if (jsErrors.length > 0) {
+      console.log(`❌ Found ${jsErrors.length} JavaScript error(s):`);
+      jsErrors.forEach(err => {
+        console.log(`   Page: ${err.page}`);
+        console.log(`   Error: ${err.message}\n`);
+      });
+    } else {
+      console.log('✅ No JavaScript runtime errors detected');
+    }
+
+    if (jsErrors.length > 0) {
+      console.log(`\n⚠️  JavaScript errors found on ${jsErrors.length} page(s)`);
+    }
+  });
+
+  test('5.4 Check for accessibility violations', async ({ page }) => {
+    await page.goto('/');
+    
+    const a11yIssues = await page.evaluate(() => {
+      const issues: string[] = [];
+      
+      // Check for images without alt text
+      const imgsNoAlt = document.querySelectorAll('img:not([alt])');
+      if (imgsNoAlt.length > 0) {
+        issues.push(`${imgsNoAlt.length} image(s) missing alt attribute`);
+      }
+      
+      // Check for links without accessible text
+      const linksNoText = Array.from(document.querySelectorAll('a')).filter(
+        a => !a.textContent?.trim() && !a.getAttribute('aria-label')
+      );
+      if (linksNoText.length > 0) {
+        issues.push(`${linksNoText.length} link(s) without accessible text`);
+      }
+      
+      // Check for form inputs without labels
+      const inputsNoLabel = Array.from(document.querySelectorAll('input:not([type="hidden"])')).filter(
+        input => {
+          const id = input.getAttribute('id');
+          const hasLabel = id && document.querySelector(`label[for="${id}"]`);
+          const hasAriaLabel = input.getAttribute('aria-label');
+          return !hasLabel && !hasAriaLabel;
+        }
+      );
+      if (inputsNoLabel.length > 0) {
+        issues.push(`${inputsNoLabel.length} input(s) without labels`);
+      }
+      
+      // Check for low contrast text (basic check)
+      const bodyStyle = window.getComputedStyle(document.body);
+      const bgColor = bodyStyle.backgroundColor;
+      const textColor = bodyStyle.color;
+      
+      return issues;
+    });
+
+    console.log('\n=== Accessibility Issues ===');
+    if (a11yIssues.length > 0) {
+      console.log('❌ Found accessibility issues:');
+      a11yIssues.forEach(issue => {
+        console.log(`   - ${issue}`);
+      });
+    } else {
+      console.log('✅ No basic accessibility violations detected');
+    }
+
+    if (a11yIssues.length > 0) {
+      console.log(`\n⚠️  ${a11yIssues.length} accessibility issue(s) found`);
+    }
+  });
+
+  test('5.5 Check for performance issues (slow loading resources)', async ({ page }) => {
+    const slowResources: { url: string; duration: number }[] = [];
+    const SLOW_THRESHOLD_MS = 3000; // Resources taking more than 3 seconds
+    
+    page.on('response', async (response) => {
+      const timing = response.timing();
+      const duration = timing.responseEnd;
+      
+      if (duration > SLOW_THRESHOLD_MS) {
+        slowResources.push({
+          url: response.url(),
+          duration: Math.round(duration)
+        });
+      }
+    });
+
+    await page.goto('/');
+    await page.waitForLoadState('networkidle');
+
+    console.log('\n=== Performance Issues ===');
+    if (slowResources.length > 0) {
+      console.log(`⚠️  Found ${slowResources.length} slow-loading resource(s):`);
+      slowResources.forEach(resource => {
+        console.log(`   - ${resource.duration}ms: ${resource.url}`);
+      });
+    } else {
+      console.log('✅ All resources loaded within acceptable time');
+    }
+  });
+
+  test('5.6 Check for mixed content warnings (HTTP on HTTPS)', async ({ page }) => {
+    const mixedContentWarnings: string[] = [];
+    
+    page.on('console', (msg) => {
+      const text = msg.text();
+      if (text.toLowerCase().includes('mixed content') || 
+          text.toLowerCase().includes('insecure')) {
+        mixedContentWarnings.push(text);
+      }
+    });
+
+    await page.goto('/');
+    
+    // Check for HTTP resources on HTTPS page
+    const httpResources = await page.evaluate(() => {
+      const resources: string[] = [];
+      
+      // Check images
+      document.querySelectorAll('img[src^="http://"]').forEach(img => {
+        resources.push(`Image: ${(img as HTMLImageElement).src}`);
+      });
+      
+      // Check scripts
+      document.querySelectorAll('script[src^="http://"]').forEach(script => {
+        resources.push(`Script: ${(script as HTMLScriptElement).src}`);
+      });
+      
+      // Check stylesheets
+      document.querySelectorAll('link[href^="http://"]').forEach(link => {
+        resources.push(`Stylesheet: ${(link as HTMLLinkElement).href}`);
+      });
+      
+      return resources;
+    });
+
+    console.log('\n=== Mixed Content Check ===');
+    if (httpResources.length > 0 || mixedContentWarnings.length > 0) {
+      console.log('⚠️  Potential mixed content issues:');
+      httpResources.forEach(resource => {
+        console.log(`   - ${resource}`);
+      });
+      mixedContentWarnings.forEach(warning => {
+        console.log(`   - Console: ${warning}`);
+      });
+    } else {
+      console.log('✅ No mixed content issues detected');
+    }
+  });
+
+  test('5.7 Check for invalid HTML structure', async ({ page }) => {
+    await page.goto('/');
+    
+    const htmlIssues = await page.evaluate(() => {
+      const issues: string[] = [];
+      
+      // Check for duplicate IDs
+      const ids = Array.from(document.querySelectorAll('[id]')).map(el => el.id);
+      const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);
+      if (duplicateIds.length > 0) {
+        issues.push(`Duplicate IDs found: ${[...new Set(duplicateIds)].join(', ')}`);
+      }
+      
+      // Check for empty required attributes
+      const emptyHrefs = document.querySelectorAll('a[href=""]');
+      if (emptyHrefs.length > 0) {
+        issues.push(`${emptyHrefs.length} link(s) with empty href attribute`);
+      }
+      
+      // Check for buttons without type
+      const buttonsNoType = document.querySelectorAll('button:not([type])');
+      if (buttonsNoType.length > 0) {
+        issues.push(`${buttonsNoType.length} button(s) without type attribute`);
+      }
+      
+      return issues;
+    });
+
+    console.log('\n=== HTML Structure Issues ===');
+    if (htmlIssues.length > 0) {
+      console.log('❌ Found HTML structure issues:');
+      htmlIssues.forEach(issue => {
+        console.log(`   - ${issue}`);
+      });
+    } else {
+      console.log('✅ No HTML structure issues detected');
+    }
+
+    if (htmlIssues.length > 0) {
+      console.log(`\n⚠️  ${htmlIssues.length} HTML issue(s) found`);
+    }
+  });
+
+  test('5.8 Check for form validation issues', async ({ page }) => {
+    await page.goto('/');
+    
+    // Look for contact or login forms
+    const hasForm = await page.locator('form').count() > 0;
+    
+    if (!hasForm) {
+      console.log('\n=== Form Validation ===');
+      console.log('ℹ️  No forms found on homepage');
+      return;
+    }
+
+    const formIssues = await page.evaluate(() => {
+      const issues: string[] = [];
+      const forms = document.querySelectorAll('form');
+      
+      forms.forEach((form, index) => {
+        // Check for required fields without proper validation
+        const requiredInputs = form.querySelectorAll('input[required]');
+        if (requiredInputs.length === 0) {
+          issues.push(`Form ${index + 1}: No required fields (may allow empty submission)`);
+        }
+        
+        // Check for email inputs without type="email"
+        const emailFields = Array.from(form.querySelectorAll('input')).filter(
+          input => {
+            const name = input.getAttribute('name')?.toLowerCase() || '';
+            const id = input.getAttribute('id')?.toLowerCase() || '';
+            const placeholder = input.getAttribute('placeholder')?.toLowerCase() || '';
+            return (name.includes('email') || id.includes('email') || placeholder.includes('email')) 
+                   && input.getAttribute('type') !== 'email';
+          }
+        );
+        if (emailFields.length > 0) {
+          issues.push(`Form ${index + 1}: ${emailFields.length} email field(s) without type="email"`);
+        }
+      });
+      
+      return issues;
+    });
+
+    console.log('\n=== Form Validation Issues ===');
+    if (formIssues.length > 0) {
+      console.log('⚠️  Found form validation issues:');
+      formIssues.forEach(issue => {
+        console.log(`   - ${issue}`);
+      });
+    } else {
+      console.log('✅ No form validation issues detected');
+    }
+  });
+});

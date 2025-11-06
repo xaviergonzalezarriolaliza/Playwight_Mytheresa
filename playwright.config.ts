@@ -15,7 +15,7 @@ function safeSegment(s?: string) {
 }
 
 function selectedProjectsHintFromArgv() {
-  const args = process.argv.slice(2);
+  const args = process.argv.slice(2);OO
   const picked: string[] = [];
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
@@ -94,6 +94,14 @@ export default defineConfig({
     {
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
+    },
+    {
+      name: 'Google Chrome',
+      use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+    },
+    {
+      name: 'Microsoft Edge',
+      use: { ...devices['Desktop Edge'], channel: 'msedge' },
     },
   ],
 });
