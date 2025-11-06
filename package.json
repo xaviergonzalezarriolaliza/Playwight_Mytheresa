@@ -4,14 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "playwright test"
+    "test": "playwright test",
+    "test:pdf": "playwright test && node scripts/export-report-pdf.js",
+    "report:pdf": "node scripts/export-report-pdf.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "\"><4v¡ Gonzale Arriola",
   "license": "ISC",
   "devDependencies": {
     "@axe-core/playwright": "^4.11.0",
     "@playwright/test": "^1.56.1",
-    "@types/node": "^24.10.0"
+    "@types/node": "^24.10.0",
+    "markdown-pdf": "^11.0.0"
   }
 }

@@ -15,7 +15,7 @@ function safeSegment(s?: string) {
 }
 
 function selectedProjectsHintFromArgv() {
-  const args = process.argv.slice(2);OO
+  const args = process.argv.slice(2);
   const picked: string[] = [];
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
