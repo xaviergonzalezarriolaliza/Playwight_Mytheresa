@@ -42,20 +42,48 @@ test.describe('Test Case 1: Console Error Detection', () => {
     
     // STRATEGY 1: Playwright Event Listeners (Standard Approach)
     const strategy1Errors: string[] = [];
-    page.on('console', msg => {
+    const consoleHandler = (msg: any) => {
       if (msg.type() === 'error') {
         const loc = msg.location?.() as any;
         const locStr = loc && loc.url ? ` @ ${loc.url}:${loc.lineNumber || '?'}` : '';
         strategy1Errors.push(`${msg.text()}${locStr}`);
       }
-    });
-    page.on('pageerror', error => {
+    };
+    const pageerrorHandler = (error: Error) => {
       strategy1Errors.push(`PageError: ${error.message}`);
-    });
+    };
+    
+    page.on('console', consoleHandler);
+    page.on('pageerror', pageerrorHandler);
 
-    await page.goto('/');
+    // STRATEGY 2: Request Failure Monitoring (Cross-Browser Compatible)
+    const strategy2Errors: string[] = [];
+    
+    const requestfailedHandler = (request: any) => {
+      const failure = request.failure();
+      strategy2Errors.push(`Request failed: ${request.url()} - ${failure?.errorText || 'Unknown error'}`);
+    };
+    
+    const responseHandler = (response: any) => {
+      // Capture HTTP errors (4xx, 5xx)
+      if (response.status() >= 400) {
+        strategy2Errors.push(`HTTP ${response.status()}: ${response.url()}`);
+      }
+    };
+    
+    page.on('requestfailed', requestfailedHandler);
+    page.on('response', responseHandler);
+
+    // Single page load for both strategies
+    await page.goto('/', { timeout: 60000 });
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(500); // Let async errors surface
+    
+    // Remove listeners to prevent teardown issues
+    page.off('console', consoleHandler);
+    page.off('pageerror', pageerrorHandler);
+    page.off('requestfailed', requestfailedHandler);
+    page.off('response', responseHandler);
     
     console.log(`[${browserName}] === STRATEGY 1: Playwright Event Listeners ===`);
     console.log(`[${browserName}] Captures: console.error + unhandled exceptions`);
@@ -63,43 +91,12 @@ test.describe('Test Case 1: Console Error Detection', () => {
     if (strategy1Errors.length > 0) {
       strategy1Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
     }
-
-    // STRATEGY 2: Chrome DevTools Protocol (Browser-Level Comprehensive)
-    // Only run CDP on Chromium-based browsers
-    let strategy2Errors: string[] = [];
-    const projectName = test.info().project.name.toLowerCase();
-    const isChromiumBased = projectName.includes('chromium') || projectName.includes('chrome') || projectName.includes('edge');
     
-    if (isChromiumBased) {
-      try {
-        const client = await page.context().newCDPSession(page);
-        await client.send('Log.enable');
-        
-        const cdpErrors: string[] = [];
-        client.on('Log.entryAdded', (entry: any) => {
-          if (entry.entry && entry.entry.level === 'error') {
-            cdpErrors.push(`${entry.entry.text || entry.entry.source || 'Unknown error'}`);
-          }
-        });
-        
-        await page.goto('/');
-        await page.waitForLoadState('networkidle');
-        await page.waitForTimeout(500);
-        
-        strategy2Errors = cdpErrors;
-        
-        console.log(`[${browserName}] === STRATEGY 2: Chrome DevTools Protocol (CDP) ===`);
-        console.log(`[${browserName}] Captures: Browser-level logs, security violations, deprecations`);
-        console.log(`[${browserName}] Errors found: ${strategy2Errors.length}`);
-        if (strategy2Errors.length > 0) {
-          strategy2Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
-        }
-      } catch (error) {
-        console.log(`[${browserName}] CDP not available (non-Chromium browser)`);
-      }
-    } else {
-      console.log(`[${browserName}] === STRATEGY 2: CDP skipped (Firefox/WebKit) ===`);
-      console.log(`[${browserName}] CDP is Chromium-only; using Strategy 1 results`);
+    console.log(`[${browserName}] === STRATEGY 2: Request Failure Monitoring ===`);
+    console.log(`[${browserName}] Captures: Failed network requests, HTTP errors (4xx, 5xx)`);
+    console.log(`[${browserName}] Errors found: ${strategy2Errors.length}`);
+    if (strategy2Errors.length > 0) {
+      strategy2Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
     }
 
     // Consolidate and validate

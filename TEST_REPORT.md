@@ -63,30 +63,31 @@ page.on('pageerror', error => {
 
 **Coverage:** Console errors, runtime exceptions, application-level errors
 
-#### Strategy 2: Chrome DevTools Protocol (Browser-Level Comprehensive)
-**Method:** Browser's native logging API via CDP session  
+#### Strategy 2: Request Failure Monitoring (Cross-Browser Compatible)
+**Method:** Playwright's network event monitoring API  
 **What it captures:**
-- Browser-level log entries (error, warning, info)
-- Security violations (CSP, CORS, mixed content)
-- Deprecation warnings
-- Low-level browser internals
-- Resource loading failures at the browser level
+- Failed network requests (DNS failures, connection refused, timeouts)
+- HTTP error status codes (4xx client errors, 5xx server errors)
+- Resource loading failures (images, scripts, stylesheets)
+- Network-level errors during page lifecycle
 
-**Why it's valuable:** CDP provides the most comprehensive view into Chromium browser internals. It captures errors that may not surface through standard console APIs, including browser-specific warnings and security policy violations. This gives us a **second layer of validation** on Chromium-based browsers.
+**Why it's valuable:** Network monitoring provides visibility into HTTP-level failures that may not always surface as console errors. This captures broken links, missing resources, and server errors that impact user experience. Works reliably across **all browsers** (Chromium, Firefox, WebKit).
 
 **Example detection:**
 ```javascript
-const client = await page.context().newCDPSession(page);
-await client.send('Log.enable');
-client.on('Log.entryAdded', entry => {
-  if (entry.entry.level === 'error') {
-    errors.push(entry.entry.text);
+page.on('requestfailed', request => {
+  const failure = request.failure();
+  errors.push(`Request failed: ${request.url()} - ${failure?.errorText}`);
+});
+page.on('response', response => {
+  if (response.status() >= 400) {
+    errors.push(`HTTP ${response.status()}: ${response.url()}`);
   }
 });
 ```
 
-**Coverage:** Browser internals, security warnings, resource failures, deprecations  
-**Note:** CDP is **Chromium-only** (Chrome, Edge, Chromium). On Firefox/WebKit, the test relies solely on Strategy 1.
+**Coverage:** Network failures, HTTP errors, resource loading issues, connectivity problems  
+**Note:** Works on **all browsers** - Chromium, Firefox, and WebKit fully support these event listeners.
 
 ### Why Two Strategies?
 
@@ -94,13 +95,13 @@ client.on('Log.entryAdded', entry => {
 
 **2. Complementary Coverage:** 
 - Strategy 1 catches **application-level** errors (JS exceptions, console.error calls)
-- Strategy 2 catches **browser-level** issues (security violations, deprecations, internal warnings)
-- Together they provide **full-stack error visibility**
+- Strategy 2 catches **network-level** issues (failed requests, HTTP errors, missing resources)
+- Together they provide **full-stack error visibility** from browser to network
 
 **3. Cross-Browser Compatibility:** 
-- Strategy 1 works on **all browsers** (Firefox, WebKit, Chromium)
-- Strategy 2 adds **depth on Chromium** browsers where CDP is available
-- Graceful fallback ensures tests work everywhere
+- Both strategies work on **all browsers** (Firefox, WebKit, Chromium)
+- No browser-specific code or limitations
+- Consistent behavior ensures reliable results across the entire test matrix
 
 **4. Industry Best Practice:** This dual-layer approach demonstrates:
 - Understanding of browser internals and testing APIs
