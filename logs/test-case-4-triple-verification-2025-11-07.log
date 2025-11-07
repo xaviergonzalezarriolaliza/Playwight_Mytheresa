@@ -1,0 +1,42 @@
+Test Case 4: GitHub Pull Request Scraper - Triple Verification Run Log
+Date: 2025-11-07
+
+Summary
+- Goal: Ensure three independent strategies return identical PR sets across all browsers
+- Strategies:
+  1) Strategy 1: Issue Row Container Selectors (.js-issue-row + child selectors)
+  2) Strategy 2: Class-based Selectors (class + attribute fallbacks)
+  3) Strategy 3: Raw HTML Parsing (regex scanning of anchors, authors, dates)
+- Navigation: goto(..., { waitUntil: 'domcontentloaded' }), wait for .js-issue-row
+- Timeout: 120s per test
+
+Browser Results
+- chromium: 25 PRs, triple agreement: 100% (25/25), CSV generated
+- firefox: 25 PRs, triple agreement: 100% (25/25), CSV generated
+- webkit: 25 PRs, triple agreement: 100% (25/25), CSV generated
+- Google Chrome: 25 PRs, triple agreement: 100% (25/25), CSV generated
+- Microsoft Edge: 25 PRs, triple agreement: 100% (25/25), CSV generated
+
+CSV Files (test-results/)
+- github-prs-chromium-<timestamp>.csv
+- github-prs-firefox-<timestamp>.csv
+- github-prs-webkit-<timestamp>.csv
+- github-prs-Google Chrome-<timestamp>.csv
+- github-prs-Microsoft Edge-<timestamp>.csv
+
+Key Console Excerpts
+- "All strategies agree: ✅ PERFECT"
+- "Verification rate: 100.0% triple verification"
+
+Implementation Notes
+- Strategy 3 implemented with regex patterns:
+  - PR anchor: <a href="/.../pull/123">TITLE</a>
+  - Author: data-hovercard-type="user">USERNAME</a>
+  - Date: relative-time datetime="ISO8601" or [datetime]
+- HTML entities decoded for accurate titles
+- Deduplication by absolute PR URL
+
+Next Steps
+- Monitor GitHub DOM for changes; update regex/class selectors if needed
+- Keep network waits to domcontentloaded to avoid networkidle hangs
+- Consider adding retries if GitHub rate limiting appears
