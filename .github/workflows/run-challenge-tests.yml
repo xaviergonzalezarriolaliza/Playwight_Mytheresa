@@ -36,14 +36,6 @@ jobs:
         run: npm test -- tests/challenge/
         continue-on-error: true
 
-      - name: Install markdown-pdf for report generation
-        run: npm install -g markdown-pdf
-
-      - name: Generate timestamped PDF report
-        run: |
-          TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
-          npx markdown-pdf TEST_REPORT.md -o "TEST_REPORT_${TIMESTAMP}_github-ci.pdf"
-
       - name: Upload HTML Report
         uses: actions/upload-artifact@v4
         if: always()
@@ -59,21 +51,3 @@ jobs:
           name: test-results
           path: test-results/
           retention-days: 30
-
-      - name: Upload PDF Report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: pdf-report
-          path: TEST_REPORT_*.pdf
-          retention-days: 30
-
-      - name: Commit and push reports (optional)
-        if: success()
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add reports/ test-results/ TEST_REPORT_*.pdf
-          git diff --staged --quiet || git commit -m "ci: add test reports from GitHub Actions run"
-          git push
-        continue-on-error: true
