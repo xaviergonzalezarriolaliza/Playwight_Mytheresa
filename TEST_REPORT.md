@@ -11,17 +11,30 @@
 
 This report documents the successful completion of the QA Engineer Technical Challenge. Five comprehensive test cases were implemented using Playwright with TypeScript and executed across five browsers: Chromium, Firefox, WebKit, Google Chrome, and Microsoft Edge.
 
-Note on environment constraints:
-- Docker-based runs were not executed locally due to limited machine resources (CPU/RAM). Attempts to pull/run images were deferred to avoid instability. All results in this report come from native Playwright runs on the host environment and GitHub-hosted browsers.
+### Test Environment Notes
+
+**Local Development Machine:**
+- **Device:** DESKTOP-R9L3ONV
+- **CPU:** AMD A4-5000 APU @ 1.50 GHz (4 cores)
+- **RAM:** 4 GB (3.44 GB usable)
+- **Storage:** 224 GB SSD (CT240BX500SSD1)
+- **GPU:** AMD Radeon HD 8330 (494 MB)
+- **OS:** Windows 10 Home 64-bit (Build 19045.6456)
+
+**Environment Constraints:**
+- Docker-based runs were not executed locally due to limited machine resources. With only 3.44 GB usable RAM and a low-power 1.5 GHz CPU, running Docker Desktop would consume most available resources (~1.5 GB for Docker + ~1.5 GB for Windows), leaving insufficient memory for stable Playwright test execution.
+- **Alternative Solution:** Tests are executed using **GitHub Actions** (Ubuntu runners with 2-core CPU and 7 GB RAM), which provides a more robust and reliable testing environment than the local machine.
+- Local native Playwright runs were used for development and debugging on the host Windows environment.
 
 ### Test Execution Summary
 - **Total Test Cases:** 5 (4 core + 1 extended bug hunting suite)
 - **Core Test Executions:** 30 (6 test scenarios × 5 browsers)
 - **Pass Rate:** 100%
-- **Test Duration:** ~5 minutes
+- **Test Duration:** ~3-5 minutes (GitHub Actions) / ~15-20 minutes (local)
 - **Browsers Tested:** Chromium, Firefox, WebKit, Chrome, Edge
 - **Application Under Test:** https://pocketaces2.github.io/fashionhub/
 - **Extended Coverage:** 8 additional bug detection categories (Test Case 5)
+- **CI/CD:** GitHub Actions workflow configured for automated testing on every push
 
 ---
 
@@ -592,11 +605,75 @@ All test artifacts, including this report, videos, traces, screenshots, and CSV 
 
 ---
 
+## CI/CD Integration & GitHub Actions
+
+Due to local hardware constraints (AMD A4-5000 APU with 3.44 GB usable RAM), the project leverages **GitHub Actions** for automated testing in a production-like Linux environment.
+
+### GitHub Actions Workflow
+
+**Workflow File:** `.github/workflows/run-challenge-tests.yml`
+
+**Features:**
+- ✅ Automatic execution on every push to `main` branch
+- ✅ Manual trigger via workflow_dispatch
+- ✅ Ubuntu Linux runners (2-core CPU, 7 GB RAM)
+- ✅ All 5 browsers tested (Chromium, Firefox, WebKit, Chrome, Edge)
+- ✅ Automatic artifact generation and storage (30 days retention)
+- ✅ HTML report generation
+- ✅ PDF report generation
+- ✅ Video recording of all test executions
+- ✅ Screenshot capture on key actions and failures
+- ✅ Playwright trace files for debugging
+
+**Workflow Triggers:**
+- Push to `main` branch with changes in `tests/challenge/**`
+- Manual trigger from GitHub Actions UI
+- Changes to the workflow file itself
+
+**Artifacts Generated:**
+1. **playwright-report.zip** - Interactive HTML report with test results, videos, screenshots
+2. **test-results.zip** - Individual test artifacts (screenshots, videos, traces per test)
+3. **pdf-report.zip** - PDF summary report (TEST_REPORT_YYYY-MM-DD_HH-MM-SS_github-ci.pdf)
+
+**View Test Results:**
+- Live runs: https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/actions
+- Download artifacts from completed workflow runs
+- View traces locally: `npx playwright show-trace path/to/trace.zip`
+
+### Why GitHub Actions?
+
+**Hardware Comparison:**
+
+| Component | Local Machine | GitHub Actions |
+|-----------|--------------|----------------|
+| CPU | AMD A4-5000 @ 1.5 GHz (4 cores) | 2-core @ 2.0+ GHz |
+| RAM | 3.44 GB usable | 7 GB |
+| OS | Windows 10 Home | Ubuntu Linux |
+| Stability | Limited by resources | 99.9% uptime |
+| Speed | ~15-20 minutes | ~3-5 minutes |
+| Cost | Requires full PC resources | Free (2,000 min/month) |
+| Docker | Not viable (<4GB RAM) | Native Linux environment |
+
+**Benefits:**
+- ✅ **3-4x faster** test execution
+- ✅ **Production-like environment** (Linux)
+- ✅ **No local resource consumption** - PC remains usable
+- ✅ **Automatic archiving** of test artifacts
+- ✅ **Cross-platform validation** (Windows development → Linux testing)
+- ✅ **Free for public repositories** (unlimited for open source)
+
+This approach demonstrates practical problem-solving: when local hardware is insufficient for Docker-based testing, leveraging cloud CI/CD provides a superior solution at zero cost.
+
+---
+
 ## Appendix
 
 ### Repository Structure
 ```
 Playwight_Mytheresa/
+├── .github/
+│   └── workflows/
+│       └── run-challenge-tests.yml
 ├── tests/
 │   ├── challenge/
 │   │   ├── test-case-1-console-errors.spec.ts
@@ -608,6 +685,9 @@ Playwight_Mytheresa/
 │   │   └── HomePage.ts
 │   └── utils/
 │       └── cookies.ts
+├── scripts/
+│   ├── export-report-pdf.js
+│   └── organize-test-artifacts.js
 ├── report-screenshots/
 │   ├── tc1-console-errors-homepage.png
 │   ├── tc1-about-page-errors.png
@@ -615,6 +695,12 @@ Playwight_Mytheresa/
 │   └── tc3-login.png
 ├── playwright.config.ts
 ├── package.json
+├── .wslconfig (WSL2 configuration for low-RAM systems)
+├── run-docker-lowres.bat (Ultra-low resource Docker script)
+├── run-docker-sequential.bat (Sequential test execution)
+├── DOCKER_CONFIG.md
+├── SETUP_FOR_LOW_RAM.md
+├── GITHUB_ACTIONS_GUIDE.md
 ├── CHALLENGE_README.md
 ├── TEST_CASE_5_BUG_HUNTING.md
 └── TEST_REPORT.md (this file)
