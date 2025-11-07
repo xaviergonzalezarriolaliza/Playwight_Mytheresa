@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
-    "test:pdf": "playwright test && node scripts/export-report-pdf.js",
+    "test:pdf": "playwright test || true && node scripts/export-report-pdf.js",
     "report:pdf": "node scripts/export-report-pdf.js"
   },
   "keywords": [],

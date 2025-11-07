@@ -11,6 +11,9 @@
 
 This report documents the successful completion of the QA Engineer Technical Challenge. Five comprehensive test cases were implemented using Playwright with TypeScript and executed across five browsers: Chromium, Firefox, WebKit, Google Chrome, and Microsoft Edge.
 
+Note on environment constraints:
+- Docker-based runs were not executed locally due to limited machine resources (CPU/RAM). Attempts to pull/run images were deferred to avoid instability. All results in this report come from native Playwright runs on the host environment and GitHub-hosted browsers.
+
 ### Test Execution Summary
 - **Total Test Cases:** 5 (4 core + 1 extended bug hunting suite)
 - **Core Test Executions:** 30 (6 test scenarios × 5 browsers)
