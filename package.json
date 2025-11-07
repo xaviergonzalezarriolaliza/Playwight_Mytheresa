@@ -6,7 +6,8 @@
   "scripts": {
     "test": "playwright test",
     "test:pdf": "playwright test || true && node scripts/export-report-pdf.js",
-    "report:pdf": "node scripts/export-report-pdf.js"
+    "report:pdf": "node scripts/export-report-pdf.js",
+    "migration:pdf": "node scripts/generate-migration-pdf.js MIGRATION_GUIDE.md"
   },
   "keywords": [],
   "author": "\"><4v¡ Gonzale Arriola",

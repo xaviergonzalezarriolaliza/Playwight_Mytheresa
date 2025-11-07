@@ -22,34 +22,33 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     await page.waitForSelector('[data-hovercard-type="pull_request"], .js-issue-row', { timeout: 10000 });
     
     // ============================================================================
-    // STRATEGY 1: Primary Selector Strategy (data attributes + semantic classes)
+    // STRATEGY 1: Primary Selector Strategy (data attributes)
     // ============================================================================
-    console.log('\n=== STRATEGY 1: Primary Selectors ===');
+    console.log('\n=== STRATEGY 1: Data Attribute Selectors ===');
     const pullRequests1 = await page.evaluate(() => {
-      const prElements = document.querySelectorAll('[data-hovercard-type="pull_request"], .js-issue-row');
-      const prs: { title: string; createdDate: string; author: string }[] = [];
+      const prElements = document.querySelectorAll('[data-hovercard-type="pull_request"]');
+      const prs: { title: string; createdDate: string; author: string; url: string }[] = [];
       
       prElements.forEach((prElement) => {
         try {
-          // Primary selector: data attribute for title
-          const titleElement = prElement.querySelector('a.Link--primary, .markdown-title');
-          const title = titleElement?.textContent?.trim() || 'N/A';
+          const titleElement = prElement.querySelector('a.Link--primary') ||
+                              prElement.querySelector('a[href*="/pull/"]');
+          const title = titleElement?.textContent?.trim() || '';
+          const url = (titleElement as HTMLAnchorElement)?.href || '';
           
-          // Primary selector: data attribute for author
-          const authorElement = prElement.querySelector('[data-hovercard-type="user"], .opened-by a');
-          const author = authorElement?.textContent?.trim() || 'N/A';
+          const authorElement = prElement.querySelector('[data-hovercard-type="user"]') ||
+                               prElement.querySelector('a[href^="/"]');
+          const author = authorElement?.textContent?.trim() || '';
           
-          // Primary selector: relative-time component
-          const dateElement = prElement.querySelector('relative-time, time, .opened-by relative-time');
-          const createdDate = dateElement?.getAttribute('datetime') || 
-                            dateElement?.getAttribute('title') ||
-                            dateElement?.textContent?.trim() || 'N/A';
+          const dateElement = prElement.querySelector('relative-time') ||
+                             prElement.querySelector('[datetime]');
+          const createdDate = dateElement?.getAttribute('datetime') || '';
           
-          if (title !== 'N/A') {
-            prs.push({ title, createdDate, author });
+          if (title && url && url.includes('/pull/')) {
+            prs.push({ title, createdDate: createdDate || 'N/A', author: author || 'N/A', url });
           }
         } catch (error) {
-          console.error('Strategy 1 - Error extracting PR data:', error);
+          // Skip problematic elements
         }
       });
       
@@ -59,40 +58,31 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     console.log(`Strategy 1 found: ${pullRequests1.length} PRs`);
     
     // ============================================================================
-    // STRATEGY 2: Alternative Selector Strategy (structural navigation)
+    // STRATEGY 2: Class-based Selector Strategy
     // ============================================================================
-    console.log('\n=== STRATEGY 2: Alternative Selectors ===');
+    console.log('\n=== STRATEGY 2: Class-based Selectors ===');
     const pullRequests2 = await page.evaluate(() => {
-      // Alternative approach: Use different structural selectors
-      const prElements = document.querySelectorAll('div[id^="issue_"], .js-navigation-item, [data-id]');
-      const prs: { title: string; createdDate: string; author: string }[] = [];
+      const prElements = document.querySelectorAll('.js-issue-row');
+      const prs: { title: string; createdDate: string; author: string; url: string }[] = [];
       
       prElements.forEach((prElement) => {
         try {
-          // Alternative selector: look for any link in the PR row
-          const titleElement = prElement.querySelector('a[id^="issue_"], a.js-navigation-open, a[href*="/pull/"]') ||
-                              prElement.querySelector('a:not([data-hovercard-type="user"])');
-          const title = titleElement?.textContent?.trim() || 'N/A';
+          const titleElement = prElement.querySelector('a[href*="/pull/"]') ||
+                              prElement.querySelector('.Link--primary');
+          const title = titleElement?.textContent?.trim() || '';
+          const url = (titleElement as HTMLAnchorElement)?.href || '';
           
-          // Alternative selector: find author by relationship to title
-          const authorElement = prElement.querySelector('a[href^="/"][href*="/"][data-hovercard-type="user"]') ||
-                               prElement.querySelector('.opened-by a:first-of-type');
-          const author = authorElement?.textContent?.trim() || 'N/A';
+          const authorElement = prElement.querySelector('[data-hovercard-type="user"]');
+          const author = authorElement?.textContent?.trim() || '';
           
-          // Alternative selector: find time element by tag and attributes
-          const dateElement = prElement.querySelector('relative-time[datetime]') ||
-                             prElement.querySelector('time[datetime]') ||
-                             prElement.querySelector('[datetime]');
-          const createdDate = dateElement?.getAttribute('datetime') || 
-                            dateElement?.getAttribute('title') ||
-                            'N/A';
+          const dateElement = prElement.querySelector('relative-time');
+          const createdDate = dateElement?.getAttribute('datetime') || '';
           
-          // Only add if we got meaningful data
-          if (title !== 'N/A' && title.length > 0 && !title.includes('Author') && !title.includes('Label')) {
-            prs.push({ title, createdDate, author });
+          if (title && url && url.includes('/pull/')) {
+            prs.push({ title, createdDate: createdDate || 'N/A', author: author || 'N/A', url });
           }
         } catch (error) {
-          console.error('Strategy 2 - Error extracting PR data:', error);
+          // Skip problematic elements
         }
       });
       
@@ -102,57 +92,105 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     console.log(`Strategy 2 found: ${pullRequests2.length} PRs`);
     
     // ============================================================================
-    // VERIFICATION: Compare results from both strategies
+    // STRATEGY 3: Playwright Locator API (different approach)
     // ============================================================================
-    console.log('\n=== DUAL VERIFICATION ANALYSIS ===');
+    console.log('\n=== STRATEGY 3: Playwright Locator API ===');
     
-    // Use Strategy 1 as primary, but validate with Strategy 2
-    const pullRequests = pullRequests1;
+    // Wait for PR list
+    const prRows = await page.locator('[data-hovercard-type="pull_request"]').all();
+    const pullRequests3: { title: string; createdDate: string; author: string; url: string }[] = [];
     
-    // Check if both strategies found similar number of PRs (within 10% tolerance)
-    const difference = Math.abs(pullRequests1.length - pullRequests2.length);
-    const tolerance = Math.max(pullRequests1.length, pullRequests2.length) * 0.1;
-    const strategiesAgree = difference <= tolerance;
-    
-    console.log(`Strategy agreement: ${strategiesAgree ? '✅ PASS' : '⚠️  WARNING'}`);
-    console.log(`  Strategy 1: ${pullRequests1.length} PRs`);
-    console.log(`  Strategy 2: ${pullRequests2.length} PRs`);
-    console.log(`  Difference: ${difference} (tolerance: ${Math.round(tolerance)})`);
-    
-    // Cross-verify titles exist in both strategies
-    if (pullRequests1.length > 0 && pullRequests2.length > 0) {
-      const titles1 = new Set(pullRequests1.map(pr => pr.title));
-      const titles2 = new Set(pullRequests2.map(pr => pr.title));
-      
-      let matchCount = 0;
-      titles1.forEach(title => {
-        if (titles2.has(title)) matchCount++;
-      });
-      
-      const matchPercentage = (matchCount / Math.max(titles1.size, titles2.size)) * 100;
-      console.log(`\nTitle cross-verification:`);
-      console.log(`  Matching titles: ${matchCount}/${Math.max(titles1.size, titles2.size)} (${matchPercentage.toFixed(1)}%)`);
-      
-      if (matchPercentage < 80) {
-        console.log(`  ⚠️  WARNING: Low match percentage might indicate selector changes`);
-      } else {
-        console.log(`  ✅ High confidence in data accuracy`);
+    for (const prRow of prRows) {
+      try {
+        const titleLoc = prRow.locator('a.Link--primary').first();
+        const title = await titleLoc.textContent() || '';
+        const url = await titleLoc.getAttribute('href') || '';
+        
+        const authorLoc = prRow.locator('[data-hovercard-type="user"]').first();
+        const author = await authorLoc.textContent() || '';
+        
+        const dateLoc = prRow.locator('relative-time').first();
+        const createdDate = await dateLoc.getAttribute('datetime') || '';
+        
+        if (title.trim() && author.trim() && createdDate) {
+          pullRequests3.push({ title: title.trim(), createdDate, author: author.trim(), url });
+        }
+      } catch (error) {
+        // Skip rows that don't have complete data
       }
     }
     
-    // Use the strategy with more results as primary data
-    const primaryData = pullRequests1.length >= pullRequests2.length ? pullRequests1 : pullRequests2;
-    const primaryStrategy = pullRequests1.length >= pullRequests2.length ? 'Strategy 1' : 'Strategy 2';
-    console.log(`\nUsing ${primaryStrategy} as primary data source (${primaryData.length} PRs)`);
+    console.log(`Strategy 3 found: ${pullRequests3.length} PRs`);
     
-    // Final dataset
-    const finalPullRequests = primaryData;
+    // ============================================================================
+    // TRIPLE VERIFICATION: Compare all three strategies
+    // ============================================================================
+    console.log('\n=== TRIPLE VERIFICATION ANALYSIS ===');
+    
+    // All three must agree (exact match required)
+    const allAgree = (pullRequests1.length === pullRequests2.length) && 
+                     (pullRequests2.length === pullRequests3.length);
+    
+    console.log(`All strategies agree: ${allAgree ? '✅ PERFECT' : '⚠️  MISMATCH DETECTED'}`);
+    console.log(`  Strategy 1 (data attributes): ${pullRequests1.length} PRs`);
+    console.log(`  Strategy 2 (classes):          ${pullRequests2.length} PRs`);
+    console.log(`  Strategy 3 (Playwright API):   ${pullRequests3.length} PRs`);
+    
+    if (!allAgree) {
+      console.log('\n⚠️  WARNING: Strategies returned different counts!');
+      console.log('  This might indicate:');
+      console.log('  - DOM structure changed');
+      console.log('  - Incomplete data in some PRs');
+      console.log('  - Different filtering logic');
+    }
+    
+    // Cross-verify by URL (most reliable unique identifier)
+    const urls1 = new Set(pullRequests1.map(pr => pr.url));
+    const urls2 = new Set(pullRequests2.map(pr => pr.url));
+    const urls3 = new Set(pullRequests3.map(pr => pr.url));
+    
+    // Find common URLs across all strategies
+    const commonUrls = [...urls1].filter(url => urls2.has(url) && urls3.has(url));
+    console.log(`\nCommon PRs across all strategies: ${commonUrls.length}`);
+    
+    // Find unique to each strategy
+    const onlyIn1 = [...urls1].filter(url => !urls2.has(url) || !urls3.has(url));
+    const onlyIn2 = [...urls2].filter(url => !urls1.has(url) || !urls3.has(url));
+    const onlyIn3 = [...urls3].filter(url => !urls1.has(url) || !urls2.has(url));
+    
+    if (onlyIn1.length > 0) console.log(`  Only in Strategy 1: ${onlyIn1.length}`);
+    if (onlyIn2.length > 0) console.log(`  Only in Strategy 2: ${onlyIn2.length}`);
+    if (onlyIn3.length > 0) console.log(`  Only in Strategy 3: ${onlyIn3.length}`);
+    
+    // Use strategy with most results, but only include PRs found by at least 2 strategies
+    const finalPullRequests: { title: string; createdDate: string; author: string; url: string; verifiedBy: number }[] = [];
+    
+    // Combine all PRs and track which strategies found them
+    const allUrls = new Set([...urls1, ...urls2, ...urls3]);
+    
+    allUrls.forEach(url => {
+      let foundCount = 0;
+      let prData = null;
+      
+      if (urls1.has(url)) { foundCount++; prData = pullRequests1.find(pr => pr.url === url); }
+      if (urls2.has(url)) { foundCount++; prData = prData || pullRequests2.find(pr => pr.url === url); }
+      if (urls3.has(url)) { foundCount++; prData = prData || pullRequests3.find(pr => pr.url === url); }
+      
+      // Only include if found by at least 2 strategies
+      if (foundCount >= 2 && prData) {
+        finalPullRequests.push({ ...prData, verifiedBy: foundCount });
+      }
+    });
+    
+    console.log(`\nFinal verified dataset: ${finalPullRequests.length} PRs`);
+    console.log(`  Verified by 3 strategies: ${finalPullRequests.filter(pr => pr.verifiedBy === 3).length}`);
+    console.log(`  Verified by 2 strategies: ${finalPullRequests.filter(pr => pr.verifiedBy === 2).length}`);
     
     console.log(`\n=== Generating CSV Report ===`);
     console.log(`Total PRs in final dataset: ${finalPullRequests.length}`);
     
     // Generate CSV content
-    const csvHeader = 'PR Name,Created Date,Author,Verification Status\n';
+    const csvHeader = 'PR Name,Created Date,Author,PR URL,Verified By\n';
     const csvRows = finalPullRequests.map(pr => {
       // Escape commas and quotes in CSV
       const escapeCsv = (str: string) => {
@@ -162,12 +200,9 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
         return str;
       };
       
-      // Check if this PR was found by both strategies
-      const foundInBoth = pullRequests1.some(p1 => p1.title === pr.title) && 
-                         pullRequests2.some(p2 => p2.title === pr.title);
-      const verificationStatus = foundInBoth ? 'Verified' : 'Single Source';
+      const verificationStatus = `${pr.verifiedBy}/3 strategies`;
       
-      return `${escapeCsv(pr.title)},${escapeCsv(pr.createdDate)},${escapeCsv(pr.author)},${verificationStatus}`;
+      return `${escapeCsv(pr.title)},${escapeCsv(pr.createdDate)},${escapeCsv(pr.author)},${escapeCsv(pr.url)},${verificationStatus}`;
     }).join('\n');
     
     const csvContent = csvHeader + csvRows;
@@ -187,31 +222,38 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     console.log(`Browser: ${browserName}`);
     console.log(`Total PRs: ${finalPullRequests.length}`);
     console.log(`CSV file saved to: ${csvFilePath}`);
-    console.log(`Verification column added: Shows if PR was found by both strategies`);
+    console.log(`Verification column: Shows how many strategies found each PR (x/3)`);
     console.log('\nFirst 5 PRs:');
     finalPullRequests.slice(0, 5).forEach((pr, index) => {
-      const verified = pullRequests1.some(p1 => p1.title === pr.title) && 
-                      pullRequests2.some(p2 => p2.title === pr.title);
-      console.log(`${index + 1}. ${pr.title} ${verified ? '✅' : '⚠️'}`);
+      const icon = pr.verifiedBy === 3 ? '✅✅✅' : pr.verifiedBy === 2 ? '✅✅' : '✅';
+      console.log(`${index + 1}. ${pr.title} ${icon}`);
       console.log(`   Author: ${pr.author}, Created: ${pr.createdDate}`);
+      console.log(`   Verified by: ${pr.verifiedBy}/3 strategies`);
     });
     
     // Assertions
     expect(finalPullRequests.length, 'Should find at least one open PR').toBeGreaterThan(0);
     expect(fs.existsSync(csvFilePath), 'CSV file should be created').toBeTruthy();
-    expect(strategiesAgree, 'Both selector strategies should find similar number of PRs').toBeTruthy();
+    expect(allAgree, 'All three strategies should return the same count').toBeTruthy();
     
     // Verify CSV content
     const csvFileContent = fs.readFileSync(csvFilePath, 'utf-8');
-    expect(csvFileContent).toContain('PR Name,Created Date,Author,Verification Status');
+    expect(csvFileContent).toContain('PR Name,Created Date,Author,PR URL,Verified By');
     expect(csvFileContent.split('\n').length).toBeGreaterThan(1);
     
     // Additional verification: ensure we have meaningful data
     const hasValidData = finalPullRequests.every(pr => 
       pr.title.length > 0 && 
-      pr.title !== 'N/A' &&
-      pr.author.length > 0
+      pr.author.length > 0 &&
+      pr.createdDate.length > 0 &&
+      pr.url.includes('/pull/')
     );
-    expect(hasValidData, 'All PRs should have valid title and author').toBeTruthy();
+    expect(hasValidData, 'All PRs should have valid title, author, date, and URL').toBeTruthy();
+    
+    // Ensure majority are verified by all 3 strategies (at least 90%)
+    const fullyVerified = finalPullRequests.filter(pr => pr.verifiedBy === 3).length;
+    const verificationRate = (fullyVerified / finalPullRequests.length) * 100;
+    console.log(`\nVerification rate: ${verificationRate.toFixed(1)}% verified by all 3 strategies`);
+    expect(verificationRate, 'At least 90% of PRs should be verified by all 3 strategies').toBeGreaterThanOrEqual(90);
   });
 });
