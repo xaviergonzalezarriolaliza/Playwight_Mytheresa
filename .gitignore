@@ -3,7 +3,7 @@ node_modules/
 
 # Playwright
 playwright-report/
-/test-results/
+# Keep test-results in repo now (user requested)
 
 # Logs
 npm-debug.log*
@@ -26,5 +26,4 @@ coverage/
 # Ignore README while it's being worked on
 README.md
 reports/
-test-results/
 playwright-report/
