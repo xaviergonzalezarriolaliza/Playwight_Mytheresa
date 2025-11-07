@@ -37,21 +37,88 @@ test.describe('Test Case 1: Console Error Detection', () => {
     });
   });
 
-  test('should detect any console errors on homepage', async ({ page }) => {
+  test('should detect any console errors on homepage - dual strategy validation', async ({ page }) => {
+    const browserName = test.info().project.name;
+    
+    // STRATEGY 1: Playwright Event Listeners (Standard Approach)
+    const strategy1Errors: string[] = [];
+    page.on('console', msg => {
+      if (msg.type() === 'error') {
+        const loc = msg.location?.() as any;
+        const locStr = loc && loc.url ? ` @ ${loc.url}:${loc.lineNumber || '?'}` : '';
+        strategy1Errors.push(`${msg.text()}${locStr}`);
+      }
+    });
+    page.on('pageerror', error => {
+      strategy1Errors.push(`PageError: ${error.message}`);
+    });
+
     await page.goto('/');
     await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500); // Let async errors surface
     
-    // Report console errors found
-    const browserName = test.info().project.name;
-    console.log(`[${browserName}] Console errors on homepage: ${consoleErrors.length}`);
-    if (consoleErrors.length > 0) {
-      console.log(`[${browserName}] Errors detected:`);
-      consoleErrors.forEach((entry, index) => console.log(`[${browserName}]   ${index + 1}. ${entry.message}`));
+    console.log(`[${browserName}] === STRATEGY 1: Playwright Event Listeners ===`);
+    console.log(`[${browserName}] Captures: console.error + unhandled exceptions`);
+    console.log(`[${browserName}] Errors found: ${strategy1Errors.length}`);
+    if (strategy1Errors.length > 0) {
+      strategy1Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
     }
+
+    // STRATEGY 2: Chrome DevTools Protocol (Browser-Level Comprehensive)
+    // Only run CDP on Chromium-based browsers
+    let strategy2Errors: string[] = [];
+    const projectName = test.info().project.name.toLowerCase();
+    const isChromiumBased = projectName.includes('chromium') || projectName.includes('chrome') || projectName.includes('edge');
     
-    // For demonstration: we log errors but don't fail if there are only 404s
-    // In production, you might want to fail on any console error
-  const criticalErrors = consoleErrors.filter(e => !isBenignConsoleError(e.message)).map(e => e.message);
+    if (isChromiumBased) {
+      try {
+        const client = await page.context().newCDPSession(page);
+        await client.send('Log.enable');
+        
+        const cdpErrors: string[] = [];
+        client.on('Log.entryAdded', (entry: any) => {
+          if (entry.entry && entry.entry.level === 'error') {
+            cdpErrors.push(`${entry.entry.text || entry.entry.source || 'Unknown error'}`);
+          }
+        });
+        
+        await page.goto('/');
+        await page.waitForLoadState('networkidle');
+        await page.waitForTimeout(500);
+        
+        strategy2Errors = cdpErrors;
+        
+        console.log(`[${browserName}] === STRATEGY 2: Chrome DevTools Protocol (CDP) ===`);
+        console.log(`[${browserName}] Captures: Browser-level logs, security violations, deprecations`);
+        console.log(`[${browserName}] Errors found: ${strategy2Errors.length}`);
+        if (strategy2Errors.length > 0) {
+          strategy2Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
+        }
+      } catch (error) {
+        console.log(`[${browserName}] CDP not available (non-Chromium browser)`);
+      }
+    } else {
+      console.log(`[${browserName}] === STRATEGY 2: CDP skipped (Firefox/WebKit) ===`);
+      console.log(`[${browserName}] CDP is Chromium-only; using Strategy 1 results`);
+    }
+
+    // Consolidate and validate
+    const allErrors = [...strategy1Errors, ...strategy2Errors];
+    const uniqueErrors = [...new Set(allErrors)]; // Deduplicate
+    
+    console.log(`[${browserName}] === CONSOLIDATED RESULTS ===`);
+    console.log(`[${browserName}] Total unique errors: ${uniqueErrors.length}`);
+    console.log(`[${browserName}]   Strategy 1: ${strategy1Errors.length}`);
+    console.log(`[${browserName}]   Strategy 2: ${strategy2Errors.length}`);
+    
+    // Filter benign errors
+    const criticalErrors = uniqueErrors.filter(e => !isBenignConsoleError(e));
+    
+    console.log(`[${browserName}] Critical errors (after filtering benign): ${criticalErrors.length}`);
+    if (criticalErrors.length > 0) {
+      console.log(`[${browserName}] Critical errors:`);
+      criticalErrors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
+    }
     
     expect(criticalErrors, `Critical console errors found: ${criticalErrors.join(', ')}`).toHaveLength(0);
   });

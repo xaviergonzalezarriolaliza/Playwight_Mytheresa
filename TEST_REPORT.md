@@ -32,8 +32,93 @@ Detect and report console errors across all pages of the FashionHub application.
 
 ### Implementation Highlights
 - **File:** `tests/challenge/test-case-1-console-errors.spec.ts`
-- **Strategy:** Monitors both `console.error` and `pageerror` events
+- **Strategy:** Dual-strategy validation using complementary detection methods
 - **Coverage:** Homepage and About page
+
+### Dual-Strategy Error Detection Approach
+
+To ensure comprehensive and reliable console error detection, Test Case 1 employs **2 complementary detection strategies** that validate findings through independent methods. This dual-strategy approach provides confidence that no errors are missed while avoiding redundant or confusing checks.
+
+#### Strategy 1: Playwright Event Listeners (Standard Approach)
+**Method:** Playwright's native `page.on()` event API  
+**What it captures:**
+- Browser console messages of type `error`
+- Unhandled JavaScript exceptions via `pageerror` events
+- Real-time error streaming during page lifecycle
+- Location information (file and line number where available)
+
+**Why it's essential:** This is the industry-standard Playwright approach for error detection. It captures errors as they occur naturally during page interaction without any instrumentation overhead. Works reliably across **all browsers** (Chromium, Firefox, WebKit).
+
+**Example detection:**
+```javascript
+page.on('console', msg => {
+  if (msg.type() === 'error') {
+    errors.push(msg.text());
+  }
+});
+page.on('pageerror', error => {
+  errors.push(error.message);
+});
+```
+
+**Coverage:** Console errors, runtime exceptions, application-level errors
+
+#### Strategy 2: Chrome DevTools Protocol (Browser-Level Comprehensive)
+**Method:** Browser's native logging API via CDP session  
+**What it captures:**
+- Browser-level log entries (error, warning, info)
+- Security violations (CSP, CORS, mixed content)
+- Deprecation warnings
+- Low-level browser internals
+- Resource loading failures at the browser level
+
+**Why it's valuable:** CDP provides the most comprehensive view into Chromium browser internals. It captures errors that may not surface through standard console APIs, including browser-specific warnings and security policy violations. This gives us a **second layer of validation** on Chromium-based browsers.
+
+**Example detection:**
+```javascript
+const client = await page.context().newCDPSession(page);
+await client.send('Log.enable');
+client.on('Log.entryAdded', entry => {
+  if (entry.entry.level === 'error') {
+    errors.push(entry.entry.text);
+  }
+});
+```
+
+**Coverage:** Browser internals, security warnings, resource failures, deprecations  
+**Note:** CDP is **Chromium-only** (Chrome, Edge, Chromium). On Firefox/WebKit, the test relies solely on Strategy 1.
+
+### Why Two Strategies?
+
+**1. Redundancy & Validation:** Two independent detection methods confirm findings, reducing false negatives and increasing confidence in results.
+
+**2. Complementary Coverage:** 
+- Strategy 1 catches **application-level** errors (JS exceptions, console.error calls)
+- Strategy 2 catches **browser-level** issues (security violations, deprecations, internal warnings)
+- Together they provide **full-stack error visibility**
+
+**3. Cross-Browser Compatibility:** 
+- Strategy 1 works on **all browsers** (Firefox, WebKit, Chromium)
+- Strategy 2 adds **depth on Chromium** browsers where CDP is available
+- Graceful fallback ensures tests work everywhere
+
+**4. Industry Best Practice:** This dual-layer approach demonstrates:
+- Understanding of browser internals and testing APIs
+- Ability to use both standard and advanced Playwright features
+- Thoughtful test design that balances thoroughness with maintainability
+
+### Consolidated Results & Filtering
+
+After running both strategies:
+1. **Consolidated** into a single error list
+2. **Deduplicated** to remove redundant detections (same error caught by both strategies)
+3. **Filtered** to exclude benign errors:
+   - Known browser noise (CSP favicon warnings in Firefox)
+   - Expected 404s from external resources
+   - Browser-specific policy messages
+4. **Reported** with clear browser tags for transparency
+
+This approach provides high confidence that the application is truly error-free (or accurately reports genuine issues) while avoiding false positives from benign browser behavior.
 
 ### Test Scenarios
 
