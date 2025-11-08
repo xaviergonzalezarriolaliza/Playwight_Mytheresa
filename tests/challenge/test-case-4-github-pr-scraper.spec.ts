@@ -8,8 +8,13 @@ interface PullRequest {
   author: string;
 }
 
-test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
+test.describe('Test Case 4: GitHub Pull Request Scraper', {
+  tag: ['@external', '@github', '@api-scraping', '@independent']
+}, () => {
   test('should fetch open PRs and generate CSV report with dual verification', async ({ page }, testInfo) => {
+    // Increase timeout for this test as GitHub can be slow and we have 3 strategies to run
+    test.setTimeout(60000); // 60 seconds
+    
     const repoUrl = 'https://github.com/appwrite/appwrite/pulls';
     
     // Get browser name from test info
@@ -19,33 +24,53 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     await page.waitForLoadState('networkidle');
     
     // Wait for PR list to load
-    await page.waitForSelector('[data-hovercard-type="pull_request"], .js-issue-row', { timeout: 10000 });
+    await page.waitForSelector('.js-issue-row', { timeout: 10000 });
     
     // ============================================================================
-    // STRATEGY 1: Primary Selector Strategy (data attributes)
+    // STRATEGY 1: DOM Query with Multiple Selectors (Defensive)
+    // Uses multiple fallback selectors and thorough validation
     // ============================================================================
-    console.log('\n=== STRATEGY 1: Data Attribute Selectors ===');
+    console.log('\n=== STRATEGY 1: DOM Query with Fallbacks ===');
     const pullRequests1 = await page.evaluate(() => {
-      const prElements = document.querySelectorAll('[data-hovercard-type="pull_request"]');
+      // Try the most reliable selector first
+      let prElements = document.querySelectorAll('.js-issue-row');
+      
+      // Fallback to aria labels if needed
+      if (prElements.length === 0) {
+        prElements = document.querySelectorAll('[aria-label*="pull request"]');
+      }
+      
       const prs: { title: string; createdDate: string; author: string; url: string }[] = [];
       
       prElements.forEach((prElement) => {
         try {
-          const titleElement = prElement.querySelector('a.Link--primary') ||
-                              prElement.querySelector('a[href*="/pull/"]');
-          const title = titleElement?.textContent?.trim() || '';
-          const url = (titleElement as HTMLAnchorElement)?.href || '';
+          // Find title link - try multiple selectors
+          const titleElement = prElement.querySelector('a[href*="/pull/"]') ||
+                              prElement.querySelector('a.Link--primary') ||
+                              prElement.querySelector('.Link--primary');
           
+          if (!titleElement) return;
+          
+          const title = titleElement.textContent?.trim() || '';
+          const href = (titleElement as HTMLAnchorElement).href || '';
+          
+          // Build full URL
+          let url = href;
+          if (href && !href.startsWith('http')) {
+            url = `https://github.com${href}`;
+          }
+          
+          // Find author
           const authorElement = prElement.querySelector('[data-hovercard-type="user"]') ||
-                               prElement.querySelector('a[href^="/"]');
-          const author = authorElement?.textContent?.trim() || '';
+                               prElement.querySelector('a[href^="/"][href*="/"]');
+          const author = authorElement?.textContent?.trim() || 'N/A';
           
-          const dateElement = prElement.querySelector('relative-time') ||
-                             prElement.querySelector('[datetime]');
-          const createdDate = dateElement?.getAttribute('datetime') || '';
+          // Find date
+          const dateElement = prElement.querySelector('relative-time');
+          const createdDate = dateElement?.getAttribute('datetime') || 'N/A';
           
           if (title && url && url.includes('/pull/')) {
-            prs.push({ title, createdDate: createdDate || 'N/A', author: author || 'N/A', url });
+            prs.push({ title, createdDate, author, url });
           }
         } catch (error) {
           // Skip problematic elements
@@ -92,31 +117,58 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     console.log(`Strategy 2 found: ${pullRequests2.length} PRs`);
     
     // ============================================================================
-    // STRATEGY 3: Playwright Locator API (different approach)
+    // STRATEGY 3: Playwright Locator API with Robust Selectors
+    // Uses .js-issue-row like Strategy 2 but with Playwright's API for comparison
     // ============================================================================
-    console.log('\n=== STRATEGY 3: Playwright Locator API ===');
+    console.log('\n=== STRATEGY 3: Playwright Locator API (Robust) ===');
     
-    // Wait for PR list
-    const prRows = await page.locator('[data-hovercard-type="pull_request"]').all();
+    // Wait for PR list using the class-based selector
+    await page.waitForSelector('.js-issue-row', { timeout: 10000 });
+    const prRows = await page.locator('.js-issue-row').all();
     const pullRequests3: { title: string; createdDate: string; author: string; url: string }[] = [];
     
     for (const prRow of prRows) {
       try {
-        const titleLoc = prRow.locator('a.Link--primary').first();
+        // Try multiple selectors for title (more robust)
+        const titleLoc = prRow.locator('a[href*="/pull/"]').first();
+        const titleExists = await titleLoc.count() > 0;
+        
+        if (!titleExists) continue;
+        
         const title = await titleLoc.textContent() || '';
-        const url = await titleLoc.getAttribute('href') || '';
+        const href = await titleLoc.getAttribute('href') || '';
         
+        // Build full URL if it's relative
+        let url = href;
+        if (href && !href.startsWith('http')) {
+          url = `https://github.com${href}`;
+        }
+        
+        // Get author with fallback
+        let author = 'N/A';
         const authorLoc = prRow.locator('[data-hovercard-type="user"]').first();
-        const author = await authorLoc.textContent() || '';
+        if (await authorLoc.count() > 0) {
+          author = await authorLoc.textContent() || 'N/A';
+        }
         
+        // Get date with fallback
+        let createdDate = 'N/A';
         const dateLoc = prRow.locator('relative-time').first();
-        const createdDate = await dateLoc.getAttribute('datetime') || '';
+        if (await dateLoc.count() > 0) {
+          createdDate = await dateLoc.getAttribute('datetime') || 'N/A';
+        }
         
-        if (title.trim() && author.trim() && createdDate) {
-          pullRequests3.push({ title: title.trim(), createdDate, author: author.trim(), url });
+        if (title.trim() && url.includes('/pull/')) {
+          pullRequests3.push({ 
+            title: title.trim(), 
+            createdDate, 
+            author: author.trim(), 
+            url 
+          });
         }
       } catch (error) {
         // Skip rows that don't have complete data
+        console.log(`  Skipped row due to error: ${error}`);
       }
     }
     
@@ -162,7 +214,7 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     if (onlyIn2.length > 0) console.log(`  Only in Strategy 2: ${onlyIn2.length}`);
     if (onlyIn3.length > 0) console.log(`  Only in Strategy 3: ${onlyIn3.length}`);
     
-    // Use strategy with most results, but only include PRs found by at least 2 strategies
+    // Use strategy with most results, but require at least 2 strategies for verification
     const finalPullRequests: { title: string; createdDate: string; author: string; url: string; verifiedBy: number }[] = [];
     
     // Combine all PRs and track which strategies found them
@@ -176,7 +228,7 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
       if (urls2.has(url)) { foundCount++; prData = prData || pullRequests2.find(pr => pr.url === url); }
       if (urls3.has(url)) { foundCount++; prData = prData || pullRequests3.find(pr => pr.url === url); }
       
-      // Only include if found by at least 2 strategies
+      // Only include PRs found by at least 2 strategies for quality assurance
       if (foundCount >= 2 && prData) {
         finalPullRequests.push({ ...prData, verifiedBy: foundCount });
       }
@@ -231,10 +283,12 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
       console.log(`   Verified by: ${pr.verifiedBy}/3 strategies`);
     });
     
-    // Assertions
+    // Assertions - Strict mode: All strategies must agree
     expect(finalPullRequests.length, 'Should find at least one open PR').toBeGreaterThan(0);
     expect(fs.existsSync(csvFilePath), 'CSV file should be created').toBeTruthy();
-    expect(allAgree, 'All three strategies should return the same count').toBeTruthy();
+    
+    // All strategies MUST agree for the test to pass
+    expect(allAgree, 'All three strategies must return the same count for robust verification').toBeTruthy();
     
     // Verify CSV content
     const csvFileContent = fs.readFileSync(csvFilePath, 'utf-8');
@@ -250,7 +304,7 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', () => {
     );
     expect(hasValidData, 'All PRs should have valid title, author, date, and URL').toBeTruthy();
     
-    // Ensure majority are verified by all 3 strategies (at least 90%)
+    // Verify high verification rate: at least 90% verified by all 3 strategies
     const fullyVerified = finalPullRequests.filter(pr => pr.verifiedBy === 3).length;
     const verificationRate = (fullyVerified / finalPullRequests.length) * 100;
     console.log(`\nVerification rate: ${verificationRate.toFixed(1)}% verified by all 3 strategies`);

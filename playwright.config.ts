@@ -70,6 +70,7 @@ export default defineConfig({
     ['html', { outputFolder: `${reportBase}/html`, open: 'never' }],
     ['junit', { outputFile: `${reportBase}/junit.xml` }],
   ],
+  outputDir: `${reportBase}/test-results`, // Store test artifacts (videos, screenshots, traces) in timestamped folder
   use: {
     baseURL: getBaseURL(),
     headless: true,

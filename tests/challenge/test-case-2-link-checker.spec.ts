@@ -1,8 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test.describe('Test Case 2: Link Status Code Verification', () => {
+test.describe('Test Case 2: Link Status Code Verification', {
+  tag: ['@docker-local', '@production']
+}, () => {
   test('should verify all links return valid status codes (200 or 30x, not 40x)', async ({ page, baseURL }) => {
-    await page.goto('/');
+    await page.goto(baseURL || '/');
     await page.waitForLoadState('networkidle');
     
     const browserName = test.info().project.name;
