@@ -21,7 +21,7 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
     const browserName = testInfo.project.name;
     
     await page.goto(repoUrl);
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     
     // Wait for PR list to load
     await page.waitForSelector('.js-issue-row', { timeout: 10000 });
