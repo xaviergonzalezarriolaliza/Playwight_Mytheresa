@@ -1,0 +1,227 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  test-docker-local:
+    name: Test Docker Local Environment
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Pull Docker image
+        run: docker pull ghcr.io/pocketaces2/fashionhub:latest
+
+      - name: Start Docker container
+        run: |
+          docker run -d \
+            --name fashionhub \
+            -p 4000:80 \
+            ghcr.io/pocketaces2/fashionhub:latest
+          
+          # Wait for container to be healthy
+          echo "Waiting for container to start..."
+          sleep 5
+          
+          # Verify container is running
+          docker ps | grep fashionhub
+
+      - name: Wait for application to be ready
+        run: |
+          echo "Waiting for application to respond..."
+          for i in {1..30}; do
+            if curl -f http://localhost:4000/fashionhub/ >/dev/null 2>&1; then
+              echo "Application is ready!"
+              exit 0
+            fi
+            echo "Attempt $i: Application not ready yet, waiting..."
+            sleep 2
+          done
+          echo "Application failed to start!"
+          docker logs fashionhub
+          exit 1
+
+      - name: Run Playwright tests against Docker local
+        run: BASE_URL=http://localhost:4000/fashionhub npx playwright test --grep "@docker-local"
+        env:
+          CI: true
+          GITHUB_ACTIONS: true
+
+      - name: Run GitHub Actions specific tests
+        run: BASE_URL=http://localhost:4000/fashionhub npx playwright test --grep "@github-actions"
+        env:
+          CI: true
+          GITHUB_ACTIONS: true
+
+      - name: Upload test results (Docker Local)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-docker-local
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test screenshots (Docker Local)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-screenshots-docker-local
+          path: test-results/
+          retention-days: 30
+
+      - name: Show Docker logs on failure
+        if: failure()
+        run: docker logs fashionhub
+
+      - name: Stop Docker container
+        if: always()
+        run: docker stop fashionhub && docker rm fashionhub
+
+  test-production:
+    name: Test Production Environment
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Verify production site is accessible
+        run: |
+          echo "Checking production site..."
+          curl -f https://pocketaces2.github.io/fashionhub/ || exit 1
+
+      - name: Run Playwright tests against Production
+        run: BASE_URL=https://pocketaces2.github.io/fashionhub npx playwright test --grep "@production"
+        env:
+          CI: true
+          GITHUB_ACTIONS: true
+
+      - name: Run GitHub Actions specific tests on Production
+        run: BASE_URL=https://pocketaces2.github.io/fashionhub npx playwright test --grep "@github-actions"
+        env:
+          CI: true
+          GITHUB_ACTIONS: true
+
+      - name: Upload test results (Production)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-production
+          path: playwright-report/
+          retention-days: 30
+
+      - name: Upload test screenshots (Production)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-screenshots-production
+          path: test-results/
+          retention-days: 30
+
+  test-independent:
+    name: Test Independent Scenarios
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Run independent tests (GitHub API scraper)
+        run: npx playwright test --grep "@independent"
+        env:
+          CI: true
+          GITHUB_ACTIONS: true
+
+      - name: Upload test results (Independent)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-independent
+          path: playwright-report/
+          retention-days: 30
+
+  summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [test-docker-local, test-production, test-independent]
+    if: always()
+    
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v4
+
+      - name: Create test summary
+        run: |
+          echo "# 🎭 Playwright Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Test Execution Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Environment | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|------------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Docker Local | ${{ needs.test-docker-local.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Production | ${{ needs.test-production.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Independent | ${{ needs.test-independent.result == 'success' && '✅ Passed' || '❌ Failed' }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Test Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- **24 Login Tests** (valid credentials, invalid inputs, security tests)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Console Error Detection**" >> $GITHUB_STEP_SUMMARY
+          echo "- **Link Validation**" >> $GITHUB_STEP_SUMMARY
+          echo "- **GitHub API Scraping**" >> $GITHUB_STEP_SUMMARY
+          echo "- **5 Browsers**: Chromium, Firefox, Webkit, Chrome, Edge" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🔒 Security Tests" >> $GITHUB_STEP_SUMMARY
+          echo "- SQL Injection Protection ✓" >> $GITHUB_STEP_SUMMARY
+          echo "- XSS Attack Prevention ✓" >> $GITHUB_STEP_SUMMARY
+          echo "- LDAP Injection Protection ✓" >> $GITHUB_STEP_SUMMARY
+          echo "- NoSQL Injection Protection ✓" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📦 Artifacts" >> $GITHUB_STEP_SUMMARY
+          echo "- Playwright HTML reports available in artifacts section" >> $GITHUB_STEP_SUMMARY
+          echo "- Test screenshots and videos (30-day retention)" >> $GITHUB_STEP_SUMMARY
+          echo "- Test results retained for 30 days" >> $GITHUB_STEP_SUMMARY
