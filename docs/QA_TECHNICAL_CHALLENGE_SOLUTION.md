@@ -291,12 +291,10 @@ $ npx playwright test test-case-4-github-pr-scraper --project=chromium --reporte
 
 Running 1 test using 1 worker
 
-📊 Total Open PRs: 651
-📄 Total Pages to scrape: 27
-⏱️  Estimated time: 7 minutes
+📊 Scraping all available open PRs with pagination...
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📄 PAGE 1/27 (4% complete)
+📄 PAGE 1
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Strategy 1: DOM Query with Fallbacks...
     Found 25 PRs (Total so far: 25)
@@ -306,7 +304,7 @@ Running 1 test using 1 worker
     Found 25 PRs (Total so far: 25)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📄 PAGE 2/27 (7% complete)
+📄 PAGE 2
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Strategy 1: DOM Query with Fallbacks...
     Found 25 PRs (Total so far: 50)
@@ -318,7 +316,7 @@ Running 1 test using 1 worker
 [... pages 3-9 continue with 25 PRs each ...]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📄 PAGE 10/27 (37% complete)
+📄 PAGE 10
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   Strategy 1: DOM Query with Fallbacks...
     Found 8 PRs (Total so far: 233)
@@ -328,22 +326,22 @@ Running 1 test using 1 worker
     Found 8 PRs (Total so far: 233)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📄 PAGE 11/27 (41% complete)
+📄 PAGE 11
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   ⚠️  No PRs found on page 11, stopping pagination
 
 ================================================================================
-✅ SCRAPING COMPLETE - All 27 pages processed
+✅ SCRAPING COMPLETE - All available open PRs scraped
 ================================================================================
-Strategy 1 Total: 233 PRs
-Strategy 2 Total: 233 PRs
-Strategy 3 Total: 233 PRs
+Strategy 1 Total: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
+Strategy 2 Total: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
+Strategy 3 Total: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
 
 === TRIPLE VERIFICATION ANALYSIS ===
 All strategies agree: ✅ PERFECT
-  Strategy 1 (data attributes): 233 PRs
-  Strategy 2 (classes):          233 PRs
-  Strategy 3 (Playwright API):   233 PRs
+  Strategy 1 (data attributes): <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
+  Strategy 2 (classes):          <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
+  Strategy 3 (Playwright API):   <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
 
 Common PRs across all strategies: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span>
 Final verified dataset: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
