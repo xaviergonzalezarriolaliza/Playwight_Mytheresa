@@ -251,7 +251,7 @@ Slowest: Edge (1,300ms)
 Scrape **ALL** open pull requests from GitHub's Appwrite repository with **automatic pagination** and generate CSV reports with triple-strategy verification.
 
 ### Enhancement: Full Pagination Implementation
-**Scope Expansion:** Enhanced from single-page (25 PRs) to **complete multi-page scraping (233 PRs across 10 pages)**
+**Scope Expansion:** Enhanced from single-page (25 PRs) to **complete multi-page scraping (<span style="font-size: 28px; font-weight: bold; color: #000;">233</span> PRs across 10 pages)**
 
 ### Approach
 Implemented three independent scraping strategies with pagination:
@@ -277,11 +277,11 @@ Implemented three independent scraping strategies with pagination:
 #### Successful Browsers (5/5 - 100%)
 
 ```
-✅ Chromium:  233 PRs extracted across 10 pages, 100% verified by all 3 strategies
-✅ Firefox:   233 PRs extracted across 10 pages, 100% verified by all 3 strategies
-✅ Webkit:    233 PRs extracted across 10 pages, 100% verified by all 3 strategies
-✅ Chrome:    233 PRs extracted across 10 pages, 100% verified by all 3 strategies
-✅ Edge:      233 PRs extracted across 10 pages, 100% verified by all 3 strategies
+✅ Chromium:  <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs extracted across 10 pages, 100% verified by all 3 strategies
+✅ Firefox:   <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs extracted across 10 pages, 100% verified by all 3 strategies
+✅ Webkit:    <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs extracted across 10 pages, 100% verified by all 3 strategies
+✅ Chrome:    <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs extracted across 10 pages, 100% verified by all 3 strategies
+✅ Edge:      <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs extracted across 10 pages, 100% verified by all 3 strategies
 ```
 
 ### Console Output from Test Execution
@@ -345,9 +345,9 @@ All strategies agree: ✅ PERFECT
   Strategy 2 (classes):          233 PRs
   Strategy 3 (Playwright API):   233 PRs
 
-Common PRs across all strategies: 233
-Final verified dataset: 233 PRs
-  Verified by 3 strategies: 233
+Common PRs across all strategies: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span>
+Final verified dataset: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs
+  Verified by 3 strategies: <span style="font-size: 24px; font-weight: bold; color: #000;">233</span>
   Verified by 2 strategies: 0
 
 CSV file saved to: test-results/github-prs-chromium-2025-11-09T14-11-59-135Z.csv
@@ -391,17 +391,17 @@ Verification rate: 100.0% verified by all 3 strategies
 | 29 | UniqueException | 2025-10-16T09:43:07Z | fogelito | [#10657](https://github.com/appwrite/appwrite/pull/10657) | 3/3 ✅✅✅ |
 | 30 | vectordb api endpoints | 2025-10-16T07:24:20Z | ArnabChatterjee20k | [#10653](https://github.com/appwrite/appwrite/pull/10653) | 3/3 ✅✅✅ |
 
-**Complete dataset:** 233 PRs total (rows 31-233 omitted for brevity)
+**Complete dataset:** <span style="font-size: 26px; font-weight: bold; color: #000;">233</span> PRs total (rows 31-233 omitted for brevity)
 **CSV file:** `test-results/github-prs-chromium-2025-11-09T14-11-59-135Z.csv`
 
 ### Pagination Statistics
 
-- **Total PRs Scraped:** 233
+- **Total PRs Scraped:** <span style="font-size: 28px; font-weight: bold; color: #000;">233</span>
 - **Pages Traversed:** 10 (stopped automatically when page 11 was empty)
 - **Execution Time:** 1.2 minutes
 - **Average Time per Page:** ~7 seconds
 - **PRs per Page:** 25 (except last page with 8)
-- **Verification Rate:** 100% - All 233 PRs verified by 3/3 strategies
+- **Verification Rate:** 100% - All <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs verified by 3/3 strategies
 - **Data Quality:** Zero disagreements between strategies
 
 ### CSV Output Format
@@ -424,7 +424,7 @@ PR Name,Created Date,Author,PR URL,Verified By
 
 | Metric | Before Enhancement | After Enhancement | Improvement |
 |--------|-------------------|-------------------|-------------|
-| PRs Scraped | 25 | 233 | **9.3x more data** |
+| PRs Scraped | 25 | <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> | **9.3x more data** |
 | Pages Covered | 1 | 10 | **10x coverage** |
 | Execution Time | ~10s | ~72s | Still efficient |
 | Verification Rate | 100% | 100% | Maintained quality |
