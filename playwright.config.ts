@@ -57,6 +57,7 @@ function getBaseURL(): string {
 
 export default defineConfig({
   testDir: './tests',
+  testMatch: ['**/*.spec.ts', '**/*.spec.js'], // Match all spec files in any subdirectory
   timeout: 30_000,
   expect: {
     timeout: 5000,

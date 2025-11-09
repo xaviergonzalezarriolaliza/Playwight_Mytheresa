@@ -1,0 +1,502 @@
+
+Running 135 tests using 8 workers
+
+[Empty password] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓    1 [chromium] › tests\challenge\test-case-3-login.spec.ts:176:7 › Test Case 3: Login Functionality › should reject valid username with empty password @docker-local @production (2.5s)
+[chromium] Found 5 unique links to check
+[chromium] http://localhost:4000/fashionhub/ -> 200 ✓
+[chromium] http://localhost:4000/fashionhub/account.html -> 200 ✓
+[chromium] http://localhost:4000/fashionhub/products.html -> 200 ✓
+[chromium] http://localhost:4000/fashionhub/cart.html -> 200 ✓
+[chromium] http://localhost:4000/fashionhub/about.html -> 200 ✓
+[chromium] === Summary ===
+[chromium] Total links checked: 5
+[chromium] Passed: 5
+[chromium] Failed: 0
+[chromium] Console errors detected on about page:
+[chromium]   1. HTTP 404: http://localhost:4000/about.html (network)
+[chromium]   2. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/about.html (console)
+[Correct user, wrong password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[chromium] Login took 639ms
+  ✓    4 [chromium] › tests\challenge\test-case-2-link-checker.spec.ts:6:7 › Test Case 2: Link Status Code Verification › should verify all links return valid status codes (200 or 30x, not 40x) @docker-local @production (1.4s)
+[chromium] URL: http://localhost:4000/fashionhub/account.html
+[chromium] Error: false, Success msg: true, Redirected: true, User indicator: true
+  ✓    8 [chromium] › tests\challenge\test-case-1-console-errors.spec.ts:236:7 › Test Case 1: Console Error Detection › should detect console errors on about page (intentional error) @docker-local @production (992ms)
+URL after failed login: http://localhost:4000/fashionhub/login.html
+Error shown: true
+[chromium] === STRATEGY 1: Playwright Event Listeners ===
+[chromium] Captures: console.error + unhandled exceptions
+[chromium] Errors found: 1
+[chromium]   1. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/fashionhub:?
+[chromium] === STRATEGY 2: Request Failure Monitoring ===
+[chromium] Captures: Failed network requests, HTTP errors (4xx, 5xx)
+[chromium] Errors found: 1
+[chromium]   1. HTTP 404: http://localhost:4000/fashionhub
+[chromium] === CONSOLIDATED RESULTS ===
+[chromium] Total unique errors: 2
+[chromium]   Strategy 1: 1
+[chromium]   Strategy 2: 1
+[chromium] Critical errors (after filtering benign): 0
+  ✓    6 [chromium] › tests\challenge\test-case-3-login.spec.ts:33:7 › Test Case 3: Login Functionality › should successfully log in with valid credentials @docker-local @production (1.9s)
+  ✓    3 [chromium] › tests\challenge\test-case-3-login.spec.ts:205:7 › Test Case 3: Login Functionality › should reject correct username with incorrect password @docker-local @production (2.9s)
+  ✓    9 [chromium] › tests\challenge\test-case-1-console-errors.spec.ts:92:7 › Test Case 1: Console Error Detection › should detect any console errors on homepage - dual strategy validation @docker-local @production (1.7s)
+[Empty credentials] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓    2 [chromium] › tests\challenge\test-case-3-login.spec.ts:75:7 › Test Case 3: Login Functionality › should show error or remain on login page with invalid credentials @docker-local @production (3.9s)
+[Empty username] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓    5 [chromium] › tests\challenge\test-case-3-login.spec.ts:116:7 › Test Case 3: Login Functionality › should reject empty username and password @docker-local @production (3.1s)
+  ✓    7 [chromium] › tests\challenge\test-case-3-login.spec.ts:147:7 › Test Case 3: Login Functionality › should reject empty username with valid password @docker-local @production (2.9s)
+[Wrong user, correct password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[Special chars in username] Username: user@#$%^&*()';--, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   10 [chromium] › tests\challenge\test-case-3-login.spec.ts:234:7 › Test Case 3: Login Functionality › should reject incorrect username with correct password @docker-local @production (2.9s)
+  ✓   11 [chromium] › tests\challenge\test-case-3-login.spec.ts:263:7 › Test Case 3: Login Functionality › should handle username with special characters @docker-local @production (2.9s)
+[Special chars in password] URL: http://localhost:4000/fashionhub/login.html, Error: true
+[SQL Injection attempt] Payload: admin' OR '1'='1, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[XSS attempt] Payload: <script>alert('XSS')</script>, URL: http://localhost:4000/fashionhub/login.html
+  ✓   12 [chromium] › tests\challenge\test-case-3-login.spec.ts:295:7 › Test Case 3: Login Functionality › should handle password with special characters @docker-local @production (2.8s)
+  ✓   13 [chromium] › tests\challenge\test-case-3-login.spec.ts:327:7 › Test Case 3: Login Functionality › should handle SQL injection attempt in username @docker-local @production (2.8s)
+[Case sensitivity] Uppercase username URL: http://localhost:4000/fashionhub/login.html
+  ✓   14 [chromium] › tests\challenge\test-case-3-login.spec.ts:359:7 › Test Case 3: Login Functionality › should handle XSS attempt in username @docker-local @production (2.8s)
+[Whitespace] URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   15 [chromium] › tests\challenge\test-case-3-login.spec.ts:389:7 › Test Case 3: Login Functionality › should handle case-sensitive username validation @docker-local @production (2.8s)
+[Long input] Username length: 1000, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Form validation] Password field type: password
+[Form validation] Username autocomplete: null, Password autocomplete: null
+  ✓   21 [chromium] › tests\challenge\test-case-3-login.spec.ts:516:7 › Test Case 3: Login Functionality › should validate form field types @docker-local @production (931ms)
+  ✓   16 [chromium] › tests\challenge\test-case-3-login.spec.ts:409:7 › Test Case 3: Login Functionality › should handle username with leading/trailing whitespace @docker-local @production (2.7s)
+  ✓   17 [chromium] › tests\challenge\test-case-3-login.spec.ts:430:7 › Test Case 3: Login Functionality › should handle very long username input @docker-local @production (2.7s)
+[CI Environment] {
+  "isCI": false,
+  "nodeVersion": "v24.11.0"
+}
+[chromium] Running in Local environment
+[Headless Mode] Browser: chromium
+[Headless Mode] Browser version: 141.0.7390.37
+[Unicode] Username: 用户名Test123, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Emoji] Username: 😀user🔥test, URL: http://localhost:4000/fashionhub/login.html
+  ✓   18 [chromium] › tests\challenge\test-case-3-login.spec.ts:452:7 › Test Case 3: Login Functionality › should handle unicode characters in username @docker-local @production (2.7s)
+  ✓   19 [chromium] › tests\challenge\test-case-3-login.spec.ts:473:7 › Test Case 3: Login Functionality › should handle emoji in username @docker-local @production (2.7s)
+[chromium] Local login duration: 603ms
+[chromium] CI Test - URL: http://localhost:4000/fashionhub/account.html
+[chromium] CI Test - Error: false, Success: true, Redirected: true, User: true
+[Headless Mode] Login successful: true
+[Rapid attempts] URL: http://localhost:4000/fashionhub/login.html, Rate limit: false
+[LDAP Injection] Payload: *)(uid=*))(|(uid=*, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[NoSQL Injection] Payload: {"$gt":""}, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Headless Mode] Final URL: http://localhost:4000/fashionhub/account.html
+[chromium] Before login screenshot size: 21437 bytes
+  ✓   20 [chromium] › tests\challenge\test-case-3-login.spec.ts:492:7 › Test Case 3: Login Functionality › should handle rapid multiple login attempts @docker-local @production (2.7s)
+  ✓   22 [chromium] › tests\challenge\test-case-3-login.spec.ts:536:7 › Test Case 3: Login Functionality › should handle LDAP injection attempt @docker-local @production (2.6s)
+  ✓   26 [chromium] › tests\challenge\test-case-3-login.spec.ts:656:7 › Test Case 3: Login Functionality › should handle headless browser mode @docker-local @production (1.5s)
+  ✓   25 [chromium] › tests\challenge\test-case-3-login.spec.ts:597:7 › Test Case 3: Login Functionality › should work in CI/GitHub Actions environment @docker-local @production (1.5s)
+[Null bytes] URL: http://localhost:4000/fashionhub/login.html
+[chromium] After login screenshot size: 16401 bytes
+  ✓   23 [chromium] › tests\challenge\test-case-3-login.spec.ts:557:7 › Test Case 3: Login Functionality › should handle NoSQL injection attempt @docker-local @production (2.6s)
+  ✓   24 [chromium] › tests\challenge\test-case-3-login.spec.ts:578:7 › Test Case 3: Login Functionality › should handle null bytes in input @docker-local @production (2.6s)
+  ✓   27 [chromium] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production (1.5s)
+[firefox] === STRATEGY 1: Playwright Event Listeners ===
+[firefox] Captures: console.error + unhandled exceptions
+[firefox] Errors found: 0
+[firefox] === STRATEGY 2: Request Failure Monitoring ===
+[firefox] Captures: Failed network requests, HTTP errors (4xx, 5xx)
+[firefox] Errors found: 1
+[firefox]   1. HTTP 404: http://localhost:4000/fashionhub
+[firefox] === CONSOLIDATED RESULTS ===
+[firefox] Total unique errors: 1
+[firefox]   Strategy 1: 0
+[firefox]   Strategy 2: 1
+[firefox] Critical errors (after filtering benign): 0
+  ✓   28 [firefox] › tests\challenge\test-case-1-console-errors.spec.ts:92:7 › Test Case 1: Console Error Detection › should detect any console errors on homepage - dual strategy validation @docker-local @production (2.4s)
+[firefox] Console errors detected on about page:
+[firefox]   1. HTTP 404: http://localhost:4000/about.html (network)
+  ✓   30 [firefox] › tests\challenge\test-case-1-console-errors.spec.ts:236:7 › Test Case 1: Console Error Detection › should detect console errors on about page (intentional error) @docker-local @production (2.0s)
+[firefox] Found 5 unique links to check
+[firefox] http://localhost:4000/fashionhub/ -> 200 ✓
+[firefox] http://localhost:4000/fashionhub/account.html -> 200 ✓
+[firefox] http://localhost:4000/fashionhub/products.html -> 200 ✓
+[firefox] http://localhost:4000/fashionhub/cart.html -> 200 ✓
+[firefox] http://localhost:4000/fashionhub/about.html -> 200 ✓
+[firefox] === Summary ===
+[firefox] Total links checked: 5
+[firefox] Passed: 5
+[firefox] Failed: 0
+  ✓   29 [firefox] › tests\challenge\test-case-2-link-checker.spec.ts:6:7 › Test Case 2: Link Status Code Verification › should verify all links return valid status codes (200 or 30x, not 40x) @docker-local @production (2.4s)
+[Correct user, wrong password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+  ✓   32 [firefox] › tests\challenge\test-case-3-login.spec.ts:205:7 › Test Case 3: Login Functionality › should reject correct username with incorrect password @docker-local @production (3.1s)
+[Wrong user, correct password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+  ✓   33 [firefox] › tests\challenge\test-case-3-login.spec.ts:234:7 › Test Case 3: Login Functionality › should reject incorrect username with correct password @docker-local @production (3.0s)
+URL after failed login: http://localhost:4000/fashionhub/login.html
+Error shown: true
+[Special chars in username] Username: user@#$%^&*()';--, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   31 [firefox] › tests\challenge\test-case-3-login.spec.ts:75:7 › Test Case 3: Login Functionality › should show error or remain on login page with invalid credentials @docker-local @production (5.0s)
+  ✓   36 [firefox] › tests\challenge\test-case-3-login.spec.ts:263:7 › Test Case 3: Login Functionality › should handle username with special characters @docker-local @production (3.0s)
+[Empty password] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+[Special chars in password] URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   35 [firefox] › tests\challenge\test-case-3-login.spec.ts:176:7 › Test Case 3: Login Functionality › should reject valid username with empty password @docker-local @production (4.0s)
+  ✓   39 [firefox] › tests\challenge\test-case-3-login.spec.ts:295:7 › Test Case 3: Login Functionality › should handle password with special characters @docker-local @production (3.0s)
+[SQL Injection attempt] Payload: admin' OR '1'='1, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Empty credentials] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓   40 [firefox] › tests\challenge\test-case-3-login.spec.ts:327:7 › Test Case 3: Login Functionality › should handle SQL injection attempt in username @docker-local @production (3.6s)
+  ✓   34 [firefox] › tests\challenge\test-case-3-login.spec.ts:116:7 › Test Case 3: Login Functionality › should reject empty username and password @docker-local @production (4.8s)
+[Case sensitivity] Uppercase username URL: http://localhost:4000/fashionhub/login.html
+[XSS attempt] Payload: <script>alert('XSS')</script>, URL: http://localhost:4000/fashionhub/login.html
+[Empty username] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+[firefox] Login took 1134ms
+  ✓   42 [firefox] › tests\challenge\test-case-3-login.spec.ts:389:7 › Test Case 3: Login Functionality › should handle case-sensitive username validation @docker-local @production (3.3s)
+[firefox] URL: http://localhost:4000/fashionhub/account.html
+[firefox] Error: false, Success msg: true, Redirected: true, User indicator: true
+  ✓   41 [firefox] › tests\challenge\test-case-3-login.spec.ts:359:7 › Test Case 3: Login Functionality › should handle XSS attempt in username @docker-local @production (3.3s)
+  ✓   38 [firefox] › tests\challenge\test-case-3-login.spec.ts:147:7 › Test Case 3: Login Functionality › should reject empty username with valid password @docker-local @production (5.0s)
+  ✓   37 [firefox] › tests\challenge\test-case-3-login.spec.ts:33:7 › Test Case 3: Login Functionality › should successfully log in with valid credentials @docker-local @production (4.6s)
+[Whitespace] URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Long input] Username length: 1000, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Form validation] Password field type: password
+[Form validation] Username autocomplete: null, Password autocomplete: null
+  ✓   43 [firefox] › tests\challenge\test-case-3-login.spec.ts:409:7 › Test Case 3: Login Functionality › should handle username with leading/trailing whitespace @docker-local @production (3.2s)
+  ✓   48 [firefox] › tests\challenge\test-case-3-login.spec.ts:516:7 › Test Case 3: Login Functionality › should validate form field types @docker-local @production (1.6s)
+  ✓   44 [firefox] › tests\challenge\test-case-3-login.spec.ts:430:7 › Test Case 3: Login Functionality › should handle very long username input @docker-local @production (3.3s)
+[CI Environment] {
+  "isCI": false,
+  "nodeVersion": "v24.11.0"
+}
+[firefox] Running in Local environment
+[Headless Mode] Browser: firefox
+[Headless Mode] Browser version: 142.0.1
+[Unicode] Username: 用户名Test123, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Emoji] Username: 😀user🔥test, URL: http://localhost:4000/fashionhub/login.html
+  ✓   45 [firefox] › tests\challenge\test-case-3-login.spec.ts:452:7 › Test Case 3: Login Functionality › should handle unicode characters in username @docker-local @production (3.5s)
+  ✓   46 [firefox] › tests\challenge\test-case-3-login.spec.ts:473:7 › Test Case 3: Login Functionality › should handle emoji in username @docker-local @production (3.5s)
+[LDAP Injection] Payload: *)(uid=*))(|(uid=*, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Rapid attempts] URL: http://localhost:4000/fashionhub/login.html, Rate limit: false
+[NoSQL Injection] Payload: {"$gt":""}, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   49 [firefox] › tests\challenge\test-case-3-login.spec.ts:536:7 › Test Case 3: Login Functionality › should handle LDAP injection attempt @docker-local @production (3.2s)
+[firefox] Local login duration: 812ms
+[firefox] CI Test - URL: http://localhost:4000/fashionhub/account.html
+[firefox] CI Test - Error: false, Success: true, Redirected: true, User: true
+[Headless Mode] Login successful: true
+[Headless Mode] Final URL: http://localhost:4000/fashionhub/account.html
+  ✓   47 [firefox] › tests\challenge\test-case-3-login.spec.ts:492:7 › Test Case 3: Login Functionality › should handle rapid multiple login attempts @docker-local @production (3.7s)
+  ✓   50 [firefox] › tests\challenge\test-case-3-login.spec.ts:557:7 › Test Case 3: Login Functionality › should handle NoSQL injection attempt @docker-local @production (3.3s)
+  ✓   52 [firefox] › tests\challenge\test-case-3-login.spec.ts:597:7 › Test Case 3: Login Functionality › should work in CI/GitHub Actions environment @docker-local @production (2.2s)
+  ✓   53 [firefox] › tests\challenge\test-case-3-login.spec.ts:656:7 › Test Case 3: Login Functionality › should handle headless browser mode @docker-local @production (2.2s)
+[Null bytes] URL: http://localhost:4000/fashionhub/login.html
+[firefox] Before login screenshot size: 40769 bytes
+  ✓   51 [firefox] › tests\challenge\test-case-3-login.spec.ts:578:7 › Test Case 3: Login Functionality › should handle null bytes in input @docker-local @production (3.0s)
+[firefox] After login screenshot size: 32035 bytes
+  ✓   54 [firefox] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production (2.1s)
+[webkit] === STRATEGY 1: Playwright Event Listeners ===
+[webkit] Captures: console.error + unhandled exceptions
+[webkit] Errors found: 1
+[webkit]   1. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/fashionhub:?
+[webkit] === STRATEGY 2: Request Failure Monitoring ===
+[webkit] Captures: Failed network requests, HTTP errors (4xx, 5xx)
+[webkit] Errors found: 1
+[webkit]   1. HTTP 404: http://localhost:4000/fashionhub
+[webkit] === CONSOLIDATED RESULTS ===
+[webkit] Total unique errors: 2
+[webkit]   Strategy 1: 1
+[webkit]   Strategy 2: 1
+[webkit] Critical errors (after filtering benign): 0
+[webkit] Found 5 unique links to check
+[webkit] http://localhost:4000/fashionhub/ -> 200 ✓
+  ✓   55 [webkit] › tests\challenge\test-case-1-console-errors.spec.ts:92:7 › Test Case 1: Console Error Detection › should detect any console errors on homepage - dual strategy validation @docker-local @production (1.7s)
+[webkit] http://localhost:4000/fashionhub/account.html -> 200 ✓
+[webkit] http://localhost:4000/fashionhub/products.html -> 200 ✓
+[webkit] http://localhost:4000/fashionhub/cart.html -> 200 ✓
+[webkit] http://localhost:4000/fashionhub/about.html -> 200 ✓
+[webkit] === Summary ===
+[webkit] Total links checked: 5
+[webkit] Passed: 5
+[webkit] Failed: 0
+  ✓   57 [webkit] › tests\challenge\test-case-2-link-checker.spec.ts:6:7 › Test Case 2: Link Status Code Verification › should verify all links return valid status codes (200 or 30x, not 40x) @docker-local @production (1.6s)
+[webkit] Console errors detected on about page:
+[webkit]   1. HTTP 404: http://localhost:4000/about.html (network)
+[webkit]   2. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/about.html (console)
+[webkit] Login took 1079ms
+  ✓   59 [webkit] › tests\challenge\test-case-1-console-errors.spec.ts:236:7 › Test Case 1: Console Error Detection › should detect console errors on about page (intentional error) @docker-local @production (1.3s)
+[webkit] URL: http://localhost:4000/fashionhub/account.html
+[webkit] Error: false, Success msg: true, Redirected: true, User indicator: true
+  ✓   58 [webkit] › tests\challenge\test-case-3-login.spec.ts:33:7 › Test Case 3: Login Functionality › should successfully log in with valid credentials @docker-local @production (2.7s)
+URL after failed login: http://localhost:4000/fashionhub/login.html
+Error shown: true
+  ✓   56 [webkit] › tests\challenge\test-case-3-login.spec.ts:75:7 › Test Case 3: Login Functionality › should show error or remain on login page with invalid credentials @docker-local @production (4.2s)
+[Correct user, wrong password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[Wrong user, correct password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+  ✓   60 [webkit] › tests\challenge\test-case-3-login.spec.ts:205:7 › Test Case 3: Login Functionality › should reject correct username with incorrect password @docker-local @production (3.7s)
+[Empty credentials] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+[Special chars in username] Username: user@#$%^&*()';--, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   62 [webkit] › tests\challenge\test-case-3-login.spec.ts:234:7 › Test Case 3: Login Functionality › should reject incorrect username with correct password @docker-local @production (3.8s)
+  ✓   61 [webkit] › tests\challenge\test-case-3-login.spec.ts:116:7 › Test Case 3: Login Functionality › should reject empty username and password @docker-local @production (4.0s)
+  ✓   63 [webkit] › tests\challenge\test-case-3-login.spec.ts:263:7 › Test Case 3: Login Functionality › should handle username with special characters @docker-local @production (3.6s)
+[Empty username] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+[Special chars in password] URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Empty password] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓   65 [webkit] › tests\challenge\test-case-3-login.spec.ts:295:7 › Test Case 3: Login Functionality › should handle password with special characters @docker-local @production (3.8s)
+  ✓   64 [webkit] › tests\challenge\test-case-3-login.spec.ts:147:7 › Test Case 3: Login Functionality › should reject empty username with valid password @docker-local @production (3.9s)
+  ✓   66 [webkit] › tests\challenge\test-case-3-login.spec.ts:176:7 › Test Case 3: Login Functionality › should reject valid username with empty password @docker-local @production (3.9s)
+[SQL Injection attempt] Payload: admin' OR '1'='1, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   67 [webkit] › tests\challenge\test-case-3-login.spec.ts:327:7 › Test Case 3: Login Functionality › should handle SQL injection attempt in username @docker-local @production (3.8s)
+[XSS attempt] Payload: <script>alert('XSS')</script>, URL: http://localhost:4000/fashionhub/login.html
+[Case sensitivity] Uppercase username URL: http://localhost:4000/fashionhub/login.html
+[Whitespace] URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   68 [webkit] › tests\challenge\test-case-3-login.spec.ts:359:7 › Test Case 3: Login Functionality › should handle XSS attempt in username @docker-local @production (3.7s)
+[Form validation] Password field type: password
+[Form validation] Username autocomplete: null, Password autocomplete: null
+[Long input] Username length: 1000, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   70 [webkit] › tests\challenge\test-case-3-login.spec.ts:409:7 › Test Case 3: Login Functionality › should handle username with leading/trailing whitespace @docker-local @production (3.5s)
+  ✓   69 [webkit] › tests\challenge\test-case-3-login.spec.ts:389:7 › Test Case 3: Login Functionality › should handle case-sensitive username validation @docker-local @production (3.8s)
+  ✓   75 [webkit] › tests\challenge\test-case-3-login.spec.ts:516:7 › Test Case 3: Login Functionality › should validate form field types @docker-local @production (1.5s)
+  ✓   71 [webkit] › tests\challenge\test-case-3-login.spec.ts:430:7 › Test Case 3: Login Functionality › should handle very long username input @docker-local @production (3.6s)
+[Unicode] Username: 用户名Test123, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Emoji] Username: 😀user🔥test, URL: http://localhost:4000/fashionhub/login.html
+[Headless Mode] Browser: webkit
+[CI Environment] {
+  "isCI": false,
+  "nodeVersion": "v24.11.0"
+}
+[Headless Mode] Browser version: 26.0
+[webkit] Running in Local environment
+  ✓   72 [webkit] › tests\challenge\test-case-3-login.spec.ts:452:7 › Test Case 3: Login Functionality › should handle unicode characters in username @docker-local @production (3.6s)
+  ✓   73 [webkit] › tests\challenge\test-case-3-login.spec.ts:473:7 › Test Case 3: Login Functionality › should handle emoji in username @docker-local @production (3.7s)
+[Rapid attempts] URL: http://localhost:4000/fashionhub/login.html, Rate limit: false
+[webkit] Before login screenshot size: 68029 bytes
+[webkit] Local login duration: 977ms
+[webkit] CI Test - URL: http://localhost:4000/fashionhub/account.html
+[webkit] CI Test - Error: false, Success: true, Redirected: true, User: true
+  ✓   74 [webkit] › tests\challenge\test-case-3-login.spec.ts:492:7 › Test Case 3: Login Functionality › should handle rapid multiple login attempts @docker-local @production (4.9s)
+[Headless Mode] Login successful: true
+[LDAP Injection] Payload: *)(uid=*))(|(uid=*, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[NoSQL Injection] Payload: {"$gt":""}, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Null bytes] URL: http://localhost:4000/fashionhub/login.html
+[Headless Mode] Final URL: http://localhost:4000/fashionhub/account.html
+[webkit] After login screenshot size: 66725 bytes
+  ✓   79 [webkit] › tests\challenge\test-case-3-login.spec.ts:597:7 › Test Case 3: Login Functionality › should work in CI/GitHub Actions environment @docker-local @production (2.6s)
+  ✓   76 [webkit] › tests\challenge\test-case-3-login.spec.ts:536:7 › Test Case 3: Login Functionality › should handle LDAP injection attempt @docker-local @production (3.7s)
+  ✓   80 [webkit] › tests\challenge\test-case-3-login.spec.ts:656:7 › Test Case 3: Login Functionality › should handle headless browser mode @docker-local @production (2.7s)
+  ✘   81 [webkit] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production (2.3s)
+  ✓   78 [webkit] › tests\challenge\test-case-3-login.spec.ts:578:7 › Test Case 3: Login Functionality › should handle null bytes in input @docker-local @production (3.7s)
+  ✓   77 [webkit] › tests\challenge\test-case-3-login.spec.ts:557:7 › Test Case 3: Login Functionality › should handle NoSQL injection attempt @docker-local @production (3.7s)
+[Google Chrome] === STRATEGY 1: Playwright Event Listeners ===
+[Google Chrome] Captures: console.error + unhandled exceptions
+[Google Chrome] Errors found: 1
+[Google Chrome]   1. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/fashionhub:?
+[Google Chrome] === STRATEGY 2: Request Failure Monitoring ===
+[Google Chrome] Captures: Failed network requests, HTTP errors (4xx, 5xx)
+[Google Chrome] Errors found: 1
+[Google Chrome]   1. HTTP 404: http://localhost:4000/fashionhub
+[Google Chrome] === CONSOLIDATED RESULTS ===
+[Google Chrome] Total unique errors: 2
+[Google Chrome]   Strategy 1: 1
+[Google Chrome]   Strategy 2: 1
+[Google Chrome] Critical errors (after filtering benign): 0
+[Google Chrome] Console errors detected on about page:
+[Google Chrome]   1. HTTP 404: http://localhost:4000/about.html (network)
+[Google Chrome]   2. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/about.html (console)
+  ✓   82 [Google Chrome] › tests\challenge\test-case-1-console-errors.spec.ts:92:7 › Test Case 1: Console Error Detection › should detect any console errors on homepage - dual strategy validation @docker-local @production (1.7s)
+  ✓   83 [Google Chrome] › tests\challenge\test-case-1-console-errors.spec.ts:236:7 › Test Case 1: Console Error Detection › should detect console errors on about page (intentional error) @docker-local @production (902ms)
+[Google Chrome] Found 5 unique links to check
+[Google Chrome] http://localhost:4000/fashionhub/ -> 200 ✓
+[Google Chrome] http://localhost:4000/fashionhub/account.html -> 200 ✓
+[Google Chrome] http://localhost:4000/fashionhub/products.html -> 200 ✓
+[Google Chrome] http://localhost:4000/fashionhub/cart.html -> 200 ✓
+[Google Chrome] http://localhost:4000/fashionhub/about.html -> 200 ✓
+[Google Chrome] === Summary ===
+[Google Chrome] Total links checked: 5
+[Google Chrome] Passed: 5
+[Google Chrome] Failed: 0
+  ✓   84 [Google Chrome] › tests\challenge\test-case-2-link-checker.spec.ts:6:7 › Test Case 2: Link Status Code Verification › should verify all links return valid status codes (200 or 30x, not 40x) @docker-local @production (1.4s)
+[Correct user, wrong password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[Wrong user, correct password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[Google Chrome] Login took 864ms
+[Google Chrome] URL: http://localhost:4000/fashionhub/account.html
+[Google Chrome] Error: false, Success msg: true, Redirected: true, User indicator: true
+  ✓   85 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:205:7 › Test Case 3: Login Functionality › should reject correct username with incorrect password @docker-local @production (3.5s)
+  ✓   87 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:33:7 › Test Case 3: Login Functionality › should successfully log in with valid credentials @docker-local @production (2.3s)
+  ✓   86 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:234:7 › Test Case 3: Login Functionality › should reject incorrect username with correct password @docker-local @production (3.5s)
+[Empty credentials] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+[Special chars in username] Username: user@#$%^&*()';--, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   88 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:116:7 › Test Case 3: Login Functionality › should reject empty username and password @docker-local @production (3.6s)
+  ✓   89 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:263:7 › Test Case 3: Login Functionality › should handle username with special characters @docker-local @production (3.7s)
+URL after failed login: http://localhost:4000/fashionhub/login.html
+Error shown: true
+[Empty password] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓   90 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:75:7 › Test Case 3: Login Functionality › should show error or remain on login page with invalid credentials @docker-local @production (4.4s)
+[SQL Injection attempt] Payload: admin' OR '1'='1, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Special chars in password] URL: http://localhost:4000/fashionhub/login.html, Error: true
+[XSS attempt] Payload: <script>alert('XSS')</script>, URL: http://localhost:4000/fashionhub/login.html
+[Empty username] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓   91 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:176:7 › Test Case 3: Login Functionality › should reject valid username with empty password @docker-local @production (3.2s)
+  ✓   92 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:147:7 › Test Case 3: Login Functionality › should reject empty username with valid password @docker-local @production (3.4s)
+  ✓   94 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:327:7 › Test Case 3: Login Functionality › should handle SQL injection attempt in username @docker-local @production (3.6s)
+  ✓   93 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:295:7 › Test Case 3: Login Functionality › should handle password with special characters @docker-local @production (3.7s)
+  ✓   95 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:359:7 › Test Case 3: Login Functionality › should handle XSS attempt in username @docker-local @production (3.7s)
+[Case sensitivity] Uppercase username URL: http://localhost:4000/fashionhub/login.html
+[Whitespace] URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   96 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:389:7 › Test Case 3: Login Functionality › should handle case-sensitive username validation @docker-local @production (2.8s)
+[Form validation] Password field type: password
+[Form validation] Username autocomplete: null, Password autocomplete: null
+  ✓   97 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:409:7 › Test Case 3: Login Functionality › should handle username with leading/trailing whitespace @docker-local @production (3.1s)
+  ✓  102 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:516:7 › Test Case 3: Login Functionality › should validate form field types @docker-local @production (1.2s)
+[CI Environment] {
+  "isCI": false,
+  "nodeVersion": "v24.11.0"
+}
+[Google Chrome] Running in Local environment
+[Long input] Username length: 1000, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Unicode] Username: 用户名Test123, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓   98 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:430:7 › Test Case 3: Login Functionality › should handle very long username input @docker-local @production (3.0s)
+[Headless Mode] Browser: chromium
+[Headless Mode] Browser version: 142.0.7444.135
+[Emoji] Username: 😀user🔥test, URL: http://localhost:4000/fashionhub/login.html
+  ✓   99 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:452:7 › Test Case 3: Login Functionality › should handle unicode characters in username @docker-local @production (2.9s)
+[LDAP Injection] Payload: *)(uid=*))(|(uid=*, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Google Chrome] Local login duration: 691ms
+[Google Chrome] CI Test - URL: http://localhost:4000/fashionhub/account.html
+[Google Chrome] CI Test - Error: false, Success: true, Redirected: true, User: true
+[Rapid attempts] URL: http://localhost:4000/fashionhub/login.html, Rate limit: false
+  ✓  106 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:597:7 › Test Case 3: Login Functionality › should work in CI/GitHub Actions environment @docker-local @production (1.7s)
+  ✓  101 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:492:7 › Test Case 3: Login Functionality › should handle rapid multiple login attempts @docker-local @production (3.0s)
+  ✓  100 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:473:7 › Test Case 3: Login Functionality › should handle emoji in username @docker-local @production (3.1s)
+[NoSQL Injection] Payload: {"$gt":""}, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓  103 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:536:7 › Test Case 3: Login Functionality › should handle LDAP injection attempt @docker-local @production (3.2s)
+[Null bytes] URL: http://localhost:4000/fashionhub/login.html
+[Headless Mode] Login successful: true
+[Headless Mode] Final URL: http://localhost:4000/fashionhub/account.html
+  ✓  104 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:557:7 › Test Case 3: Login Functionality › should handle NoSQL injection attempt @docker-local @production (2.9s)
+[Google Chrome] Before login screenshot size: 24415 bytes
+  ✓  105 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:578:7 › Test Case 3: Login Functionality › should handle null bytes in input @docker-local @production (2.7s)
+  ✓  107 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:656:7 › Test Case 3: Login Functionality › should handle headless browser mode @docker-local @production (1.6s)
+[Google Chrome] After login screenshot size: 18876 bytes
+  ✓  108 [Google Chrome] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production (1.8s)
+[Microsoft Edge] === STRATEGY 1: Playwright Event Listeners ===
+[Microsoft Edge] Captures: console.error + unhandled exceptions
+[Microsoft Edge] Errors found: 1
+[Microsoft Edge]   1. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/fashionhub:?
+[Microsoft Edge] === STRATEGY 2: Request Failure Monitoring ===
+[Microsoft Edge] Captures: Failed network requests, HTTP errors (4xx, 5xx)
+[Microsoft Edge] Errors found: 1
+[Microsoft Edge]   1. HTTP 404: http://localhost:4000/fashionhub
+[Microsoft Edge] === CONSOLIDATED RESULTS ===
+[Microsoft Edge] Total unique errors: 2
+[Microsoft Edge]   Strategy 1: 1
+[Microsoft Edge]   Strategy 2: 1
+[Microsoft Edge] Critical errors (after filtering benign): 0
+[Microsoft Edge] Console errors detected on about page:
+[Microsoft Edge]   1. HTTP 404: http://localhost:4000/about.html (network)
+[Microsoft Edge]   2. Failed to load resource: the server responded with a status of 404 (Not Found) @ http://localhost:4000/about.html (console)
+  ✓  109 [Microsoft Edge] › tests\challenge\test-case-1-console-errors.spec.ts:92:7 › Test Case 1: Console Error Detection › should detect any console errors on homepage - dual strategy validation @docker-local @production (1.7s)
+[Microsoft Edge] Login took 684ms
+[Microsoft Edge] URL: http://localhost:4000/fashionhub/account.html
+[Microsoft Edge] Error: false, Success msg: true, Redirected: true, User indicator: true
+  ✓  110 [Microsoft Edge] › tests\challenge\test-case-1-console-errors.spec.ts:236:7 › Test Case 1: Console Error Detection › should detect console errors on about page (intentional error) @docker-local @production (1.0s)
+  ✓  111 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:33:7 › Test Case 3: Login Functionality › should successfully log in with valid credentials @docker-local @production (1.9s)
+[Microsoft Edge] Found 5 unique links to check
+[Microsoft Edge] http://localhost:4000/fashionhub/ -> 200 ✓
+[Microsoft Edge] http://localhost:4000/fashionhub/account.html -> 200 ✓
+[Microsoft Edge] http://localhost:4000/fashionhub/products.html -> 200 ✓
+[Microsoft Edge] http://localhost:4000/fashionhub/cart.html -> 200 ✓
+[Microsoft Edge] http://localhost:4000/fashionhub/about.html -> 200 ✓
+[Microsoft Edge] === Summary ===
+[Microsoft Edge] Total links checked: 5
+[Microsoft Edge] Passed: 5
+[Microsoft Edge] Failed: 0
+  ✓  112 [Microsoft Edge] › tests\challenge\test-case-2-link-checker.spec.ts:6:7 › Test Case 2: Link Status Code Verification › should verify all links return valid status codes (200 or 30x, not 40x) @docker-local @production (2.1s)
+[Correct user, wrong password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[Wrong user, correct password] URL: http://localhost:4000/fashionhub/login.html, Error shown: true
+[Special chars in username] Username: user@#$%^&*()';--, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Empty password] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+URL after failed login: http://localhost:4000/fashionhub/login.html
+Error shown: true
+  ✓  113 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:205:7 › Test Case 3: Login Functionality › should reject correct username with incorrect password @docker-local @production (4.0s)
+  ✓  114 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:234:7 › Test Case 3: Login Functionality › should reject incorrect username with correct password @docker-local @production (4.1s)
+  ✓  117 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:263:7 › Test Case 3: Login Functionality › should handle username with special characters @docker-local @production (4.1s)
+  ✓  115 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:176:7 › Test Case 3: Login Functionality › should reject valid username with empty password @docker-local @production (3.9s)
+[Empty credentials] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓  116 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:75:7 › Test Case 3: Login Functionality › should show error or remain on login page with invalid credentials @docker-local @production (4.6s)
+[Special chars in password] URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Empty username] URL: http://localhost:4000/fashionhub/login.html, Error shown: false
+  ✓  118 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:116:7 › Test Case 3: Login Functionality › should reject empty username and password @docker-local @production (3.5s)
+  ✓  119 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:147:7 › Test Case 3: Login Functionality › should reject empty username with valid password @docker-local @production (3.6s)
+  ✓  120 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:295:7 › Test Case 3: Login Functionality › should handle password with special characters @docker-local @production (3.8s)
+[SQL Injection attempt] Payload: admin' OR '1'='1, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[XSS attempt] Payload: <script>alert('XSS')</script>, URL: http://localhost:4000/fashionhub/login.html
+[Case sensitivity] Uppercase username URL: http://localhost:4000/fashionhub/login.html
+  ✓  121 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:327:7 › Test Case 3: Login Functionality › should handle SQL injection attempt in username @docker-local @production (3.4s)
+[Whitespace] URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓  122 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:359:7 › Test Case 3: Login Functionality › should handle XSS attempt in username @docker-local @production (3.4s)
+  ✓  123 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:389:7 › Test Case 3: Login Functionality › should handle case-sensitive username validation @docker-local @production (3.2s)
+[Long input] Username length: 1000, URL: http://localhost:4000/fashionhub/login.html, Error: true
+  ✓  124 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:409:7 › Test Case 3: Login Functionality › should handle username with leading/trailing whitespace @docker-local @production (3.3s)
+[Form validation] Password field type: password
+[Form validation] Username autocomplete: null, Password autocomplete: null
+[Unicode] Username: 用户名Test123, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Emoji] Username: 😀user🔥test, URL: http://localhost:4000/fashionhub/login.html
+  ✓  129 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:516:7 › Test Case 3: Login Functionality › should validate form field types @docker-local @production (1.1s)
+  ✓  125 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:430:7 › Test Case 3: Login Functionality › should handle very long username input @docker-local @production (3.3s)
+[CI Environment] {
+  "isCI": false,
+  "nodeVersion": "v24.11.0"
+}
+[Microsoft Edge] Running in Local environment
+[Headless Mode] Browser: chromium
+[Headless Mode] Browser version: 142.0.3595.65
+[Rapid attempts] URL: http://localhost:4000/fashionhub/login.html, Rate limit: false
+  ✓  126 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:452:7 › Test Case 3: Login Functionality › should handle unicode characters in username @docker-local @production (3.1s)
+  ✓  127 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:473:7 › Test Case 3: Login Functionality › should handle emoji in username @docker-local @production (3.1s)
+  ✓  128 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:492:7 › Test Case 3: Login Functionality › should handle rapid multiple login attempts @docker-local @production (3.0s)
+[Microsoft Edge] Before login screenshot size: 24415 bytes
+[LDAP Injection] Payload: *)(uid=*))(|(uid=*, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Microsoft Edge] Local login duration: 672ms
+[Microsoft Edge] CI Test - URL: http://localhost:4000/fashionhub/account.html
+[Microsoft Edge] CI Test - Error: false, Success: true, Redirected: true, User: true
+[NoSQL Injection] Payload: {"$gt":""}, URL: http://localhost:4000/fashionhub/login.html, Error: true
+[Headless Mode] Login successful: true
+[Headless Mode] Final URL: http://localhost:4000/fashionhub/account.html
+  ✓  133 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:597:7 › Test Case 3: Login Functionality › should work in CI/GitHub Actions environment @docker-local @production (1.8s)
+[Null bytes] URL: http://localhost:4000/fashionhub/login.html
+  ✓  130 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:536:7 › Test Case 3: Login Functionality › should handle LDAP injection attempt @docker-local @production (3.0s)
+  ✓  134 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:656:7 › Test Case 3: Login Functionality › should handle headless browser mode @docker-local @production (1.8s)
+  ✓  131 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:557:7 › Test Case 3: Login Functionality › should handle NoSQL injection attempt @docker-local @production (3.1s)
+[Microsoft Edge] After login screenshot size: 18876 bytes
+  ✓  135 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production (1.8s)
+  ✓  132 [Microsoft Edge] › tests\challenge\test-case-3-login.spec.ts:578:7 › Test Case 3: Login Functionality › should handle null bytes in input @docker-local @production (2.9s)
+
+
+  1) [webkit] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production 
+
+    Error: Login should succeed
+
+    [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+    Expected: [32mtrue[39m
+    Received: [31mfalse[39m
+
+      714 |     expect(afterScreenshot.length, 'After screenshot should be captured').toBeGreaterThan(0);
+      715 |     expect(beforeScreenshot.length, 'Screenshots should be different').not.toBe(afterScreenshot.length);
+    > 716 |     expect(notOnLoginPage, 'Login should succeed').toBe(true);
+          |                                                    ^
+      717 |   });
+      718 | });
+      719 |
+        at C:\Users\xavie\Playwight_Mytheresa\tests\challenge\test-case-3-login.spec.ts:716:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    reports\2025-11-08_14-06-25_all\test-results\challenge-test-case-3-logi-bb111-and-verify-screenshots-work-webkit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: video (video/webm) ──────────────────────────────────────────────────────────────
+    reports\2025-11-08_14-06-25_all\test-results\challenge-test-case-3-logi-bb111-and-verify-screenshots-work-webkit\video.webm
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: reports\2025-11-08_14-06-25_all\test-results\challenge-test-case-3-logi-bb111-and-verify-screenshots-work-webkit\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    reports\2025-11-08_14-06-25_all\test-results\challenge-test-case-3-logi-bb111-and-verify-screenshots-work-webkit\trace.zip
+    Usage:
+
+        npx playwright show-trace reports\2025-11-08_14-06-25_all\test-results\challenge-test-case-3-logi-bb111-and-verify-screenshots-work-webkit\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [webkit] › tests\challenge\test-case-3-login.spec.ts:686:7 › Test Case 3: Login Functionality › should capture and verify screenshots work @docker-local @production 
+  134 passed (1.5m)

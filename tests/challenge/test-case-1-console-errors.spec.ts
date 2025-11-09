@@ -82,14 +82,15 @@ test.describe('Test Case 1: Console Error Detection', {
   });
 
   /**
-   * Main Test: Dual-Strategy Console Error Detection
+   * Main Test: Triple-Strategy Console Error Detection
    * 
-   * This test validates the homepage has no critical console errors using two
+   * This test validates the homepage has no critical console errors using three
    * independent detection strategies that complement each other:
    * - Strategy 1: Application-level errors (console, exceptions)
    * - Strategy 2: Network-level errors (HTTP failures, request failures)
+   * - Strategy 3: Browser DevTools Protocol (CDP logs, performance entries)
    */
-  test('should detect any console errors on homepage - dual strategy validation', async ({ page, baseURL }) => {
+  test('should detect any console errors on homepage - triple strategy validation', async ({ page, baseURL }) => {
     // Get browser name for tagged logging (helps identify browser-specific issues)
     const browserName = test.info().project.name;
     
@@ -153,12 +154,94 @@ test.describe('Test Case 1: Console Error Detection', {
     page.on('response', responseHandler);
 
     // ============================================================================
-    // PAGE LOAD - Both strategies monitor simultaneously
+    // STRATEGY 3: Browser DevTools Protocol + Performance API (Deep Inspection)
+    // ============================================================================
+    // Detects: Browser-level logs, performance issues, resource timing errors
+    // Works on: Chromium browsers (Chrome, Edge, Chromium) - CDP specific
+    // Layer: Browser internal logs (console API, performance monitoring)
+    
+    const strategy3Errors: string[] = [];
+    
+    // Enable CDP session for Chromium-based browsers only
+    const isChromium = ['chromium', 'Google Chrome', 'Microsoft Edge'].includes(browserName);
+    
+    let cdpSession: any = null;
+    
+    if (isChromium) {
+      try {
+        // Create Chrome DevTools Protocol session
+        cdpSession = await page.context().newCDPSession(page);
+        
+        // Enable log domain to capture browser console
+        await cdpSession.send('Log.enable');
+        
+        // Listen for log entries from CDP
+        cdpSession.on('Log.entryAdded', (entry: any) => {
+          const log = entry.entry;
+          // Capture error and warning level logs
+          if (log.level === 'error' || log.level === 'warning') {
+            const source = log.source || 'unknown';
+            const text = log.text || log.message || 'No message';
+            strategy3Errors.push(`[CDP ${log.level}] ${text} (source: ${source})`);
+          }
+        });
+        
+        console.log(`[${browserName}] Strategy 3: CDP session enabled`);
+      } catch (error) {
+        console.log(`[${browserName}] Strategy 3: CDP not available (${error})`);
+      }
+    } else {
+      console.log(`[${browserName}] Strategy 3: Skipped (CDP only available in Chromium browsers)`);
+    }
+
+    // ============================================================================
+    // PAGE LOAD - All three strategies monitor simultaneously
     // ============================================================================
     
     await page.goto(baseURL || '/', { timeout: 60000 }); // Navigate to homepage with 60s timeout
     await page.waitForLoadState('networkidle'); // Wait until no network activity for 500ms
     await page.waitForTimeout(500); // Additional wait for async errors to surface
+    
+    // ============================================================================
+    // STRATEGY 3 CONTINUED: Performance API Evaluation (Cross-Browser)
+    // ============================================================================
+    // Check for resource loading errors via Performance API
+    // This works on all browsers and complements CDP logs
+    
+    const performanceErrors = await page.evaluate(() => {
+      const errors: string[] = [];
+      
+      // Get all resource timing entries
+      const resources = performance.getEntriesByType('resource') as PerformanceResourceTiming[];
+      
+      resources.forEach(resource => {
+        // Check for failed resources (0 transfer size often means blocked/failed)
+        // Note: Some resources like cached items also have 0 size, so we check duration too
+        if (resource.transferSize === 0 && resource.duration === 0 && !resource.name.includes('data:')) {
+          errors.push(`Resource failed to load: ${resource.name}`);
+        }
+        
+        // Check for slow resources (> 3 seconds might indicate issues)
+        if (resource.duration > 3000) {
+          errors.push(`Slow resource (${Math.round(resource.duration)}ms): ${resource.name}`);
+        }
+      });
+      
+      // Check for navigation timing issues
+      const navTiming = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+      if (navTiming) {
+        // Check if page load was extremely slow (> 10 seconds)
+        const loadTime = navTiming.loadEventEnd - navTiming.fetchStart;
+        if (loadTime > 10000) {
+          errors.push(`Slow page load: ${Math.round(loadTime)}ms`);
+        }
+      }
+      
+      return errors;
+    });
+    
+    // Add performance errors to Strategy 3
+    strategy3Errors.push(...performanceErrors);
     
     // ============================================================================
     // CLEANUP - Remove listeners to prevent teardown issues
@@ -170,8 +253,17 @@ test.describe('Test Case 1: Console Error Detection', {
     page.off('requestfailed', requestfailedHandler);
     page.off('response', responseHandler);
     
+    // Cleanup CDP session if it was created
+    if (cdpSession) {
+      try {
+        await cdpSession.detach();
+      } catch (error) {
+        // Ignore detach errors
+      }
+    }
+    
     // ============================================================================
-    // REPORTING - Log findings from both strategies
+    // REPORTING - Log findings from all three strategies
     // ============================================================================
     
     console.log(`[${browserName}] === STRATEGY 1: Playwright Event Listeners ===`);
@@ -187,13 +279,20 @@ test.describe('Test Case 1: Console Error Detection', {
     if (strategy2Errors.length > 0) {
       strategy2Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
     }
+    
+    console.log(`[${browserName}] === STRATEGY 3: Browser DevTools Protocol + Performance API ===`);
+    console.log(`[${browserName}] Captures: CDP logs (Chromium only) + Performance timing issues (all browsers)`);
+    console.log(`[${browserName}] Errors found: ${strategy3Errors.length}`);
+    if (strategy3Errors.length > 0) {
+      strategy3Errors.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
+    }
 
     // ============================================================================
     // CONSOLIDATION - Merge and deduplicate findings
     // ============================================================================
     
-    // Merge both error arrays into one
-    const allErrors = [...strategy1Errors, ...strategy2Errors];
+    // Merge all three error arrays into one
+    const allErrors = [...strategy1Errors, ...strategy2Errors, ...strategy3Errors];
     
     // Remove duplicates using Set (same error might be caught by both strategies)
     // Example: A 404 might appear as console error AND HTTP 404 response
@@ -203,6 +302,37 @@ test.describe('Test Case 1: Console Error Detection', {
     console.log(`[${browserName}] Total unique errors: ${uniqueErrors.length}`);
     console.log(`[${browserName}]   Strategy 1: ${strategy1Errors.length}`);
     console.log(`[${browserName}]   Strategy 2: ${strategy2Errors.length}`);
+    console.log(`[${browserName}]   Strategy 3: ${strategy3Errors.length}`);
+    
+    // ============================================================================
+    // STRATEGY AGREEMENT ANALYSIS
+    // ============================================================================
+    
+    // Count how many strategies detected each unique error
+    const errorVerification = new Map<string, number>();
+    
+    uniqueErrors.forEach(error => {
+      let count = 0;
+      if (strategy1Errors.includes(error)) count++;
+      if (strategy2Errors.includes(error)) count++;
+      if (strategy3Errors.includes(error)) count++;
+      errorVerification.set(error, count);
+    });
+    
+    // Categorize errors by verification level
+    const verifiedBy3 = uniqueErrors.filter(e => errorVerification.get(e) === 3);
+    const verifiedBy2 = uniqueErrors.filter(e => errorVerification.get(e) === 2);
+    const verifiedBy1 = uniqueErrors.filter(e => errorVerification.get(e) === 1);
+    
+    console.log(`[${browserName}] === VERIFICATION ANALYSIS ===`);
+    console.log(`[${browserName}] Errors verified by 3 strategies: ${verifiedBy3.length}`);
+    console.log(`[${browserName}] Errors verified by 2 strategies: ${verifiedBy2.length}`);
+    console.log(`[${browserName}] Errors verified by 1 strategy: ${verifiedBy1.length}`);
+    
+    if (verifiedBy3.length > 0) {
+      console.log(`[${browserName}] High-confidence errors (3/3 strategies):`);
+      verifiedBy3.forEach((err, i) => console.log(`[${browserName}]   ${i + 1}. ${err}`));
+    }
     
     // ============================================================================
     // FILTERING - Remove benign errors to get critical issues only
