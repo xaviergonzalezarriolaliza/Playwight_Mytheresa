@@ -671,12 +671,12 @@ test.describe('Test Case 3: Login Functionality', {
     expect(currentURL, 'Should handle null bytes without crashing').toBeTruthy();
   });
 
-  /**
+  /****
    * TEST 23: CI/CD Environment Compatibility
    * Verifies that login works correctly in CI environments (GitHub Actions, etc.)
    * Detects CI environment and adjusts timeouts accordingly
    * Tests the same strict validation as local tests
-   */
+   * /
   test('should work in CI/GitHub Actions environment', {
     tag: ['@github-actions', '@ci']
   }, async ({ page, baseURL }) => {
