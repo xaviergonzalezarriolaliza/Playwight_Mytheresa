@@ -26,12 +26,12 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
     // Wait for PR list to load
     await page.waitForSelector('.js-issue-row', { timeout: 10000 });
     
-    // Extract total PR count from the page header - try multiple selectors
+    // Extract total PR count from the PR navigation tab
     let totalPRs = 0;
     try {
-      // Try method 1: Counter in navigation
-      const counterText = await page.locator('a[data-selected-links*="open_issues"] .Counter, a[id*="issues-tab"] .Counter').first().textContent({ timeout: 5000 });
-      totalPRs = parseInt(counterText?.trim() || '0', 10);
+      // Use the correct selector for the PRs tab counter
+      const counterText = await page.locator('a.btn-link.selected[data-ga-click*="Pull Requests"] .Counter').first().textContent({ timeout: 5000 });
+      totalPRs = parseInt(counterText?.replace(/[^\d]/g, '') || '0', 10);
     } catch {
       try {
         // Method 2: Count visible PRs and estimate from pagination
@@ -39,7 +39,7 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
         // Check if there's a "Next" button to determine if there are more pages
         const hasNextPage = await page.locator('a[rel="next"]').count() > 0;
         if (hasNextPage) {
-          // GitHub typically shows 25 per page, estimate conservatively
+          // GitHub typically shows 25 per page
           totalPRs = visiblePRs * 10; // Rough estimate
           console.log(`⚠️  Could not find exact count, estimating ~${totalPRs} PRs`);
         } else {
