@@ -29,11 +29,11 @@
 
 | PR# | PR Title | Author | Created Date | Verification |
 |-----|----------|--------|--------------|--------------|
-| 1 | Feat: stats sites and functions runtimes and frameworks | lohanidamodar | 2025-11-09T07:19:01Z | ✅✅✅ |
-| 2 | Added error message for the backups route | ArnabChatterjee20k | 2025-11-09T06:43:37Z | ✅✅✅ |
-| 3 | Add ElevenLabs text-to-speech sites template | adityaoberai | 2025-11-07T17:09:32Z | ✅✅✅ |
-| 4 | fix: null validation for optional params | ChiragAgg5k | 2025-11-07T04:20:11Z | ✅✅✅ |
-| 5 | fix: Enable batch mode for issue triage safe-outputs | stnguyen90 | 2025-11-06T19:42:46Z | ✅✅✅ |
+| [#10786](https://github.com/appwrite/appwrite/pull/10786) | Feat: stats sites and functions runtimes and frameworks | lohanidamodar | 2025-11-09T07:19:01Z | ✅✅✅ |
+| [#10785](https://github.com/appwrite/appwrite/pull/10785) | Added error message for the backups route | ArnabChatterjee20k | 2025-11-09T06:43:37Z | ✅✅✅ |
+| [#10782](https://github.com/appwrite/appwrite/pull/10782) | Add ElevenLabs text-to-speech sites template | adityaoberai | 2025-11-07T17:09:32Z | ✅✅✅ |
+| [#10778](https://github.com/appwrite/appwrite/pull/10778) | fix: null validation for optional params | ChiragAgg5k | 2025-11-07T04:20:11Z | ✅✅✅ |
+| [#10775](https://github.com/appwrite/appwrite/pull/10775) | fix: Enable batch mode for issue triage safe-outputs | stnguyen90 | 2025-11-06T19:42:46Z | ✅✅✅ |
 
 ---
 
