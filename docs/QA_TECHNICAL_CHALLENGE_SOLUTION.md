@@ -392,6 +392,8 @@ Verification rate: 100.0% verified by all 3 strategies
 **Complete dataset:** <span style="font-size: 26px; font-weight: bold; color: #000;">232</span> PRs total (rows 31-232 omitted for brevity)
 **CSV file:** `test-results/github-prs-chromium-2025-11-09T14-11-59-135Z.csv`
 
+<div style="page-break-before: always;"></div>
+
 **📊 Detailed Cross-Browser Analysis:** See [PRs-Cross-Browser-Comparison.pdf](PRs-Cross-Browser-Comparison.pdf) for complete comparison across all 5 browsers.
 
 ### Pagination Statistics
