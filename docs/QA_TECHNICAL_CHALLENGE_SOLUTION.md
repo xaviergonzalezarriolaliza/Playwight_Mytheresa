@@ -356,45 +356,47 @@ Verification rate: 100.0% verified by all 3 strategies
 
 ### CSV Output Sample (First 30 Rows)
 
-| # | PR Name | Created Date | Author | PR URL | Verified By |
-|---|---------|--------------|--------|---------|-------------|
-| 1 | Feat: stats sites and functions runtimes and frameworks | 2025-11-09T07:19:01Z | lohanidamodar | [#10786](https://github.com/appwrite/appwrite/pull/10786) | 3/3 ✅✅✅ |
-| 2 | Added error message for the backups route | 2025-11-09T06:43:37Z | ArnabChatterjee20k | [#10785](https://github.com/appwrite/appwrite/pull/10785) | 3/3 ✅✅✅ |
-| 3 | Add ElevenLabs text-to-speech sites template | 2025-11-07T17:09:32Z | adityaoberai | [#10782](https://github.com/appwrite/appwrite/pull/10782) | 3/3 ✅✅✅ |
-| 4 | fix: null validation for optional params | 2025-11-07T04:20:11Z | ChiragAgg5k | [#10778](https://github.com/appwrite/appwrite/pull/10778) | 3/3 ✅✅✅ |
-| 5 | fix: Enable batch mode for issue triage safe-outputs | 2025-11-06T19:42:46Z | stnguyen90 | [#10775](https://github.com/appwrite/appwrite/pull/10775) | 3/3 ✅✅✅ |
-| 6 | Set proper access-control-allow-origin for OPTIONS request | 2025-11-06T12:24:00Z | hmacr | [#10772](https://github.com/appwrite/appwrite/pull/10772) | 3/3 ✅✅✅ |
-| 7 | Send email on failed deployment | 2025-11-06T07:35:14Z | hmacr | [#10770](https://github.com/appwrite/appwrite/pull/10770) | 3/3 ✅✅✅ |
-| 8 | fix: Use supported runtimes from env config | 2025-11-04T06:40:31Z | hmacr | [#10759](https://github.com/appwrite/appwrite/pull/10759) | 3/3 ✅✅✅ |
-| 9 | Feat: utopia auth | 2025-11-04T06:23:05Z | lohanidamodar | [#10758](https://github.com/appwrite/appwrite/pull/10758) | 3/3 ✅✅✅ |
-| 10 | Add TikTok OAuth provider | 2025-11-03T22:08:45Z | Add TikTok OAuth provider | [#10756](https://github.com/appwrite/appwrite/pull/10756) | 3/3 ✅✅✅ |
-| 11 | fix: Throw error when file token expiry is in the past | 2025-11-03T11:32:11Z | hmacr | [#10751](https://github.com/appwrite/appwrite/pull/10751) | 3/3 ✅✅✅ |
-| 12 | Fix webp upload and previews | 2025-10-30T21:44:01Z | stnguyen90 | [#10738](https://github.com/appwrite/appwrite/pull/10738) | 3/3 ✅✅✅ |
-| 13 | docs: add Ubuntu prerequisites for Docker installation | 2025-10-30T03:44:43Z | Navadeep0007 | [#10734](https://github.com/appwrite/appwrite/pull/10734) | 3/3 ✅✅✅ |
-| 14 | Refactor Brazilian Portuguese translations and email templates | 2025-10-30T03:34:40Z | feschaffa | [#10733](https://github.com/appwrite/appwrite/pull/10733) | 3/3 ✅✅✅ |
-| 15 | fix: increase sites template deployment test timeout | 2025-10-29T09:55:16Z | hmacr | [#10727](https://github.com/appwrite/appwrite/pull/10727) | 3/3 ✅✅✅ |
-| 16 | Customize email preview and heading between Console and projects | 2025-10-28T14:10:27Z | hmacr | [#10723](https://github.com/appwrite/appwrite/pull/10723) | 3/3 ✅✅✅ |
-| 17 | feat: per bucket image transformations flag | 2025-10-28T08:43:52Z | ChiragAgg5k | [#10722](https://github.com/appwrite/appwrite/pull/10722) | 3/3 ✅✅✅ |
-| 18 | CSV import fix for spatial types | 2025-10-28T08:39:37Z | ArnabChatterjee20k | [#10721](https://github.com/appwrite/appwrite/pull/10721) | 3/3 ✅✅✅ |
-| 19 | Appwrite overall readability | 2025-10-28T01:24:25Z | mishmanners | [#10716](https://github.com/appwrite/appwrite/pull/10716) | 3/3 ✅✅✅ |
-| 20 | docs: fix typo in CONTRIBUTING.md | 2025-10-27T18:37:22Z | duvvuvenkataramana | [#10715](https://github.com/appwrite/appwrite/pull/10715) | 3/3 ✅✅✅ |
-| 21 | Feat: Add email templates for account change notifications | 2025-10-27T11:23:14Z | bandaranaike | [#10708](https://github.com/appwrite/appwrite/pull/10708) | 3/3 ✅✅✅ |
-| 22 | add: env var. | 2025-10-26T11:15:03Z | ItzNotABug | [#10703](https://github.com/appwrite/appwrite/pull/10703) | 3/3 ✅✅✅ |
-| 23 | Users add new email attributes | 2025-10-23T09:39:07Z | fogelito | [#10688](https://github.com/appwrite/appwrite/pull/10688) | 3/3 ✅✅✅ |
-| 24 | feat: Add provider info to the session data for OAuth2 token auth | 2025-10-22T22:38:00Z | adityaoberai | [#10685](https://github.com/appwrite/appwrite/pull/10685) | 3/3 ✅✅✅ |
-| 25 | Refactor authorization handling across multiple modules | 2025-10-22T13:37:49Z | shimonewman | [#10682](https://github.com/appwrite/appwrite/pull/10682) | 3/3 ✅✅✅ |
-| 26 | POC Feat photo api | 2025-10-22T09:23:41Z | eldadfux | [#10680](https://github.com/appwrite/appwrite/pull/10680) | 3/3 ✅✅✅ |
-| 27 | docs: fix Docker command syntax in code autocompletion section | 2025-10-21T05:54:21Z | JDeep1234 | [#10671](https://github.com/appwrite/appwrite/pull/10671) | 3/3 ✅✅✅ |
-| 28 | fix(users): handle null name param #8785 | 2025-10-16T23:52:16Z | Shobhit150 | [#10660](https://github.com/appwrite/appwrite/pull/10660) | 3/3 ✅✅✅ |
-| 29 | UniqueException | 2025-10-16T09:43:07Z | fogelito | [#10657](https://github.com/appwrite/appwrite/pull/10657) | 3/3 ✅✅✅ |
-| 30 | vectordb api endpoints | 2025-10-16T07:24:20Z | ArnabChatterjee20k | [#10653](https://github.com/appwrite/appwrite/pull/10653) | 3/3 ✅✅✅ |
+| PR# | PR Name | Created Date | Author | Verified By |
+|-----|---------|--------------|--------|-------------|
+| [#10786](https://github.com/appwrite/appwrite/pull/10786) | Feat: stats sites and functions runtimes and frameworks | 2025-11-09T07:19:01Z | lohanidamodar | 3/3 ✅✅✅ |
+| [#10785](https://github.com/appwrite/appwrite/pull/10785) | Added error message for the backups route | 2025-11-09T06:43:37Z | ArnabChatterjee20k | 3/3 ✅✅✅ |
+| [#10782](https://github.com/appwrite/appwrite/pull/10782) | Add ElevenLabs text-to-speech sites template | 2025-11-07T17:09:32Z | adityaoberai | 3/3 ✅✅✅ |
+| [#10778](https://github.com/appwrite/appwrite/pull/10778) | fix: null validation for optional params | 2025-11-07T04:20:11Z | ChiragAgg5k | 3/3 ✅✅✅ |
+| [#10775](https://github.com/appwrite/appwrite/pull/10775) | fix: Enable batch mode for issue triage safe-outputs | 2025-11-06T19:42:46Z | stnguyen90 | 3/3 ✅✅✅ |
+| [#10772](https://github.com/appwrite/appwrite/pull/10772) | Set proper access-control-allow-origin for OPTIONS request | 2025-11-06T12:24:00Z | hmacr | 3/3 ✅✅✅ |
+| [#10770](https://github.com/appwrite/appwrite/pull/10770) | Send email on failed deployment | 2025-11-06T07:35:14Z | hmacr | 3/3 ✅✅✅ |
+| [#10759](https://github.com/appwrite/appwrite/pull/10759) | fix: Use supported runtimes from env config | 2025-11-04T06:40:31Z | hmacr | 3/3 ✅✅✅ |
+| [#10758](https://github.com/appwrite/appwrite/pull/10758) | Feat: utopia auth | 2025-11-04T06:23:05Z | lohanidamodar | 3/3 ✅✅✅ |
+| [#10756](https://github.com/appwrite/appwrite/pull/10756) | Add TikTok OAuth provider | 2025-11-03T22:08:45Z | Add TikTok OAuth provider | 3/3 ✅✅✅ |
+| [#10751](https://github.com/appwrite/appwrite/pull/10751) | fix: Throw error when file token expiry is in the past | 2025-11-03T11:32:11Z | hmacr | 3/3 ✅✅✅ |
+| [#10738](https://github.com/appwrite/appwrite/pull/10738) | Fix webp upload and previews | 2025-10-30T21:44:01Z | stnguyen90 | 3/3 ✅✅✅ |
+| [#10734](https://github.com/appwrite/appwrite/pull/10734) | docs: add Ubuntu prerequisites for Docker installation | 2025-10-30T03:44:43Z | Navadeep0007 | 3/3 ✅✅✅ |
+| [#10733](https://github.com/appwrite/appwrite/pull/10733) | Refactor Brazilian Portuguese translations and email templates | 2025-10-30T03:34:40Z | feschaffa | 3/3 ✅✅✅ |
+| [#10727](https://github.com/appwrite/appwrite/pull/10727) | fix: increase sites template deployment test timeout | 2025-10-29T09:55:16Z | hmacr | 3/3 ✅✅✅ |
+| [#10723](https://github.com/appwrite/appwrite/pull/10723) | Customize email preview and heading between Console and projects | 2025-10-28T14:10:27Z | hmacr | 3/3 ✅✅✅ |
+| [#10722](https://github.com/appwrite/appwrite/pull/10722) | feat: per bucket image transformations flag | 2025-10-28T08:43:52Z | ChiragAgg5k | 3/3 ✅✅✅ |
+| [#10721](https://github.com/appwrite/appwrite/pull/10721) | CSV import fix for spatial types | 2025-10-28T08:39:37Z | ArnabChatterjee20k | 3/3 ✅✅✅ |
+| [#10716](https://github.com/appwrite/appwrite/pull/10716) | Appwrite overall readability | 2025-10-28T01:24:25Z | mishmanners | 3/3 ✅✅✅ |
+| [#10715](https://github.com/appwrite/appwrite/pull/10715) | docs: fix typo in CONTRIBUTING.md | 2025-10-27T18:37:22Z | duvvuvenkataramana | 3/3 ✅✅✅ |
+| [#10708](https://github.com/appwrite/appwrite/pull/10708) | Feat: Add email templates for account change notifications | 2025-10-27T11:23:14Z | bandaranaike | 3/3 ✅✅✅ |
+| [#10703](https://github.com/appwrite/appwrite/pull/10703) | add: env var. | 2025-10-26T11:15:03Z | ItzNotABug | 3/3 ✅✅✅ |
+| [#10688](https://github.com/appwrite/appwrite/pull/10688) | Users add new email attributes | 2025-10-23T09:39:07Z | fogelito | 3/3 ✅✅✅ |
+| [#10685](https://github.com/appwrite/appwrite/pull/10685) | feat: Add provider info to the session data for OAuth2 token auth | 2025-10-22T22:38:00Z | adityaoberai | 3/3 ✅✅✅ |
+| [#10682](https://github.com/appwrite/appwrite/pull/10682) | Refactor authorization handling across multiple modules | 2025-10-22T13:37:49Z | shimonewman | 3/3 ✅✅✅ |
+| [#10680](https://github.com/appwrite/appwrite/pull/10680) | POC Feat photo api | 2025-10-22T09:23:41Z | eldadfux | 3/3 ✅✅✅ |
+| [#10671](https://github.com/appwrite/appwrite/pull/10671) | docs: fix Docker command syntax in code autocompletion section | 2025-10-21T05:54:21Z | JDeep1234 | 3/3 ✅✅✅ |
+| [#10660](https://github.com/appwrite/appwrite/pull/10660) | fix(users): handle null name param #8785 | 2025-10-16T23:52:16Z | Shobhit150 | 3/3 ✅✅✅ |
+| [#10657](https://github.com/appwrite/appwrite/pull/10657) | UniqueException | 2025-10-16T09:43:07Z | fogelito | 3/3 ✅✅✅ |
+| [#10653](https://github.com/appwrite/appwrite/pull/10653) | vectordb api endpoints | 2025-10-16T07:24:20Z | ArnabChatterjee20k | 3/3 ✅✅✅ |
 
-**Complete dataset:** <span style="font-size: 26px; font-weight: bold; color: #000;">233</span> PRs total (rows 31-233 omitted for brevity)
+**Complete dataset:** <span style="font-size: 26px; font-weight: bold; color: #000;">232</span> PRs total (rows 31-232 omitted for brevity)
 **CSV file:** `test-results/github-prs-chromium-2025-11-09T14-11-59-135Z.csv`
+
+**📊 Detailed Cross-Browser Analysis:** See [PRs-Cross-Browser-Comparison.pdf](PRs-Cross-Browser-Comparison.pdf) for complete comparison across all 5 browsers.
 
 ### Pagination Statistics
 
-- **Total PRs Scraped:** <span style="font-size: 28px; font-weight: bold; color: #000;">233</span>
+- **Total PRs Scraped:** <span style="font-size: 28px; font-weight: bold; color: #000;">232</span>
 - **Pages Traversed:** 10 (stopped automatically when page 11 was empty)
 - **Execution Time:** 1.2 minutes
 - **Average Time per Page:** ~7 seconds
