@@ -18,7 +18,7 @@ test.describe('Test Case 2: Link Status Code Verification', () => {
       return anchors.map((a) => (a as HTMLAnchorElement).href).filter(href => href && href.trim() !== '');
     });
     
-    // Remove duplicates
+    // Remove duplicates  
     const uniqueLinks = [...new Set(links)];
     
     console.log(`\n[${browserName}] ========================================`);
