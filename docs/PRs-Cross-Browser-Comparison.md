@@ -2,6 +2,7 @@
 ## Test Case 4: Pull Request Scraper Results
 
 **Test Date:** November 9, 2025  
+**Test Timestamp:** 15:09:44 UTC  
 **Repository:** github.com/appwrite/appwrite  
 **Total PRs Scraped:** 233 (across 10 pages)
 
@@ -11,11 +12,11 @@
 
 | Browser | File Name | PRs Found | Verification | File Size |
 |---------|-----------|-----------|--------------|-----------|
-| Chromium | PRs-2025-11-09-14-11-59-chromium.csv | 233 | 3/3 strategies | 31.7 KB |
-| Firefox | PRs-2025-11-09-14-11-59-firefox.csv | 233 | 3/3 strategies | 31.7 KB |
-| Webkit | PRs-2025-11-09-14-11-59-webkit.csv | 233 | 3/3 strategies | 31.7 KB |
-| Google Chrome | PRs-2025-11-09-14-11-59-chrome.csv | 233 | 3/3 strategies | 31.7 KB |
-| Microsoft Edge | PRs-2025-11-09-14-11-59-edge.csv | 233 | 3/3 strategies | 31.7 KB |
+| Chromium | PRs-2025-11-09-15-09-44-chromium.csv | 233 | 3/3 strategies | 31.7 KB |
+| Firefox | PRs-2025-11-09-15-09-44-firefox.csv | 233 | 3/3 strategies | 31.7 KB |
+| Webkit | PRs-2025-11-09-15-09-44-webkit.csv | 233 | 3/3 strategies | 31.7 KB |
+| Google Chrome | PRs-2025-11-09-15-09-44-chrome.csv | 233 | 3/3 strategies | 31.7 KB |
+| Microsoft Edge | PRs-2025-11-09-15-09-44-edge.csv | 233 | 3/3 strategies | 31.7 KB |
 
 ---
 
@@ -76,11 +77,11 @@ All browsers completed the scraping in approximately the same time (~72 seconds)
 
 **Example:**
 ```
-PRs-2025-11-09-14-11-59-chromium.csv
-PRs-2025-11-09-14-11-59-firefox.csv
-PRs-2025-11-09-14-11-59-webkit.csv
-PRs-2025-11-09-14-11-59-chrome.csv
-PRs-2025-11-09-14-11-59-edge.csv
+PRs-2025-11-09-15-09-44-chromium.csv
+PRs-2025-11-09-15-09-44-firefox.csv
+PRs-2025-11-09-15-09-44-webkit.csv
+PRs-2025-11-09-15-09-44-chrome.csv
+PRs-2025-11-09-15-09-44-edge.csv
 ```
 
 ---
