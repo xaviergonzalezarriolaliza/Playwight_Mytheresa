@@ -358,8 +358,8 @@ Verification rate: 100.0% verified by all 3 strategies
 
 <div style="font-size: 8px;">
 
-| PR# | PR Name | Created Date | Author | Verified By |
-|-----|---------|--------------|--------|-------------|
+| PR | PR Name | Created Date | Author | Verified By |
+|----|---------|--------------|--------|-------------|
 | [#10786](https://github.com/appwrite/appwrite/pull/10786) | Feat: stats sites and functions runtimes and frameworks | Nov 09, 2025 07:19 | lohanidamodar | 3/3 ✅✅✅ |
 | [#10785](https://github.com/appwrite/appwrite/pull/10785) | Added error message for the backups route | Nov 09, 2025 06:43 | ArnabChatterjee20k | 3/3 ✅✅✅ |
 | [#10782](https://github.com/appwrite/appwrite/pull/10782) | Add ElevenLabs text-to-speech sites template | Nov 07, 2025 17:09 | adityaoberai | 3/3 ✅✅✅ |
