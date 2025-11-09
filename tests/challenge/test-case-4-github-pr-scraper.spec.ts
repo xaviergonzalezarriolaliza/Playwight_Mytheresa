@@ -12,8 +12,8 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
   tag: ['@external', '@github', '@api-scraping', '@independent']
 }, () => {
   test('should fetch open PRs and generate CSV report with dual verification', async ({ page }, testInfo) => {
-    // Increase timeout for this test as GitHub can be slow and we have 3 strategies to run
-    test.setTimeout(60000); // 60 seconds
+    // Increase timeout significantly for full pagination
+    test.setTimeout(600000); // 10 minutes for all pages
     
     const repoUrl = 'https://github.com/appwrite/appwrite/pulls';
     
@@ -26,11 +26,73 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
     // Wait for PR list to load
     await page.waitForSelector('.js-issue-row', { timeout: 10000 });
     
+    // Extract total PR count from the page header - try multiple selectors
+    let totalPRs = 0;
+    try {
+      // Try method 1: Counter in navigation
+      const counterText = await page.locator('a[data-selected-links*="open_issues"] .Counter, a[id*="issues-tab"] .Counter').first().textContent({ timeout: 5000 });
+      totalPRs = parseInt(counterText?.trim() || '0', 10);
+    } catch {
+      try {
+        // Method 2: Count visible PRs and estimate from pagination
+        const visiblePRs = await page.locator('.js-issue-row').count();
+        // Check if there's a "Next" button to determine if there are more pages
+        const hasNextPage = await page.locator('a[rel="next"]').count() > 0;
+        if (hasNextPage) {
+          // GitHub typically shows 25 per page, estimate conservatively
+          totalPRs = visiblePRs * 10; // Rough estimate
+          console.log(`⚠️  Could not find exact count, estimating ~${totalPRs} PRs`);
+        } else {
+          totalPRs = visiblePRs;
+        }
+      } catch {
+        // Fallback: just scrape the first page
+        totalPRs = 25;
+        console.log(`⚠️  Could not determine total, will scrape first page only`);
+      }
+    }
+    console.log(`\n📊 Total Open PRs: ${totalPRs}`);
+    
+    // Calculate number of pages (25 PRs per page on GitHub)
+    const prsPerPage = 25;
+    const totalPages = Math.ceil(totalPRs / prsPerPage);
+    console.log(`📄 Total Pages to scrape: ${totalPages}`);
+    console.log(`⏱️  Estimated time: ${Math.ceil(totalPages * 15 / 60)} minutes\n`);
+    
+    // Store all PRs from all pages
+    const allPullRequests1: { title: string; createdDate: string; author: string; url: string }[] = [];
+    const allPullRequests2: { title: string; createdDate: string; author: string; url: string }[] = [];
+    const allPullRequests3: { title: string; createdDate: string; author: string; url: string }[] = [];
+    
+    // Loop through all pages
+    for (let currentPage = 1; currentPage <= totalPages; currentPage++) {
+      console.log(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      console.log(`📄 PAGE ${currentPage}/${totalPages} (${Math.round(currentPage/totalPages*100)}% complete)`);
+      console.log(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+      
+      // Navigate to specific page if not on page 1
+      if (currentPage > 1) {
+        const pageUrl = `${repoUrl}?page=${currentPage}`;
+        await page.goto(pageUrl);
+        await page.waitForLoadState('domcontentloaded');
+        
+        // Check if PRs exist on this page
+        const prCount = await page.locator('.js-issue-row').count();
+        if (prCount === 0) {
+          console.log(`  ⚠️  No PRs found on page ${currentPage}, stopping pagination`);
+          break;
+        }
+        
+        await page.waitForSelector('.js-issue-row', { timeout: 10000 });
+        // Small delay to ensure page is fully loaded
+        await page.waitForTimeout(1000);
+      }
+    
     // ============================================================================
     // STRATEGY 1: DOM Query with Multiple Selectors (Defensive)
     // Uses multiple fallback selectors and thorough validation
     // ============================================================================
-    console.log('\n=== STRATEGY 1: DOM Query with Fallbacks ===');
+    console.log('  Strategy 1: DOM Query with Fallbacks...');
     const pullRequests1 = await page.evaluate(() => {
       // Try the most reliable selector first
       let prElements = document.querySelectorAll('.js-issue-row');
@@ -80,12 +142,13 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
       return prs;
     });
     
-    console.log(`Strategy 1 found: ${pullRequests1.length} PRs`);
+    allPullRequests1.push(...pullRequests1);
+    console.log(`    Found ${pullRequests1.length} PRs (Total so far: ${allPullRequests1.length})`);
     
     // ============================================================================
     // STRATEGY 2: Class-based Selector Strategy
     // ============================================================================
-    console.log('\n=== STRATEGY 2: Class-based Selectors ===');
+    console.log('  Strategy 2: Class-based Selectors...');
     const pullRequests2 = await page.evaluate(() => {
       const prElements = document.querySelectorAll('.js-issue-row');
       const prs: { title: string; createdDate: string; author: string; url: string }[] = [];
@@ -114,13 +177,14 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
       return prs;
     });
     
-    console.log(`Strategy 2 found: ${pullRequests2.length} PRs`);
+    allPullRequests2.push(...pullRequests2);
+    console.log(`    Found ${pullRequests2.length} PRs (Total so far: ${allPullRequests2.length})`);
     
     // ============================================================================
     // STRATEGY 3: Playwright Locator API with Robust Selectors
     // Uses .js-issue-row like Strategy 2 but with Playwright's API for comparison
     // ============================================================================
-    console.log('\n=== STRATEGY 3: Playwright Locator API (Robust) ===');
+    console.log('  Strategy 3: Playwright Locator API...');
     
     // Wait for PR list using the class-based selector
     await page.waitForSelector('.js-issue-row', { timeout: 10000 });
@@ -172,7 +236,19 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
       }
     }
     
-    console.log(`Strategy 3 found: ${pullRequests3.length} PRs`);
+    allPullRequests3.push(...pullRequests3);
+    console.log(`    Found ${pullRequests3.length} PRs (Total so far: ${allPullRequests3.length})`);
+    }
+    
+    // ============================================================================
+    // SUMMARY AFTER ALL PAGES
+    // ============================================================================
+    console.log(`\n\n${'='.repeat(80)}`);
+    console.log(`✅ SCRAPING COMPLETE - All ${totalPages} pages processed`);
+    console.log(`${'='.repeat(80)}`);
+    console.log(`Strategy 1 Total: ${allPullRequests1.length} PRs`);
+    console.log(`Strategy 2 Total: ${allPullRequests2.length} PRs`);
+    console.log(`Strategy 3 Total: ${allPullRequests3.length} PRs`);
     
     // ============================================================================
     // TRIPLE VERIFICATION: Compare all three strategies
@@ -180,13 +256,13 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
     console.log('\n=== TRIPLE VERIFICATION ANALYSIS ===');
     
     // All three must agree (exact match required)
-    const allAgree = (pullRequests1.length === pullRequests2.length) && 
-                     (pullRequests2.length === pullRequests3.length);
+    const allAgree = (allPullRequests1.length === allPullRequests2.length) && 
+                     (allPullRequests2.length === allPullRequests3.length);
     
     console.log(`All strategies agree: ${allAgree ? '✅ PERFECT' : '⚠️  MISMATCH DETECTED'}`);
-    console.log(`  Strategy 1 (data attributes): ${pullRequests1.length} PRs`);
-    console.log(`  Strategy 2 (classes):          ${pullRequests2.length} PRs`);
-    console.log(`  Strategy 3 (Playwright API):   ${pullRequests3.length} PRs`);
+    console.log(`  Strategy 1 (data attributes): ${allPullRequests1.length} PRs`);
+    console.log(`  Strategy 2 (classes):          ${allPullRequests2.length} PRs`);
+    console.log(`  Strategy 3 (Playwright API):   ${allPullRequests3.length} PRs`);
     
     if (!allAgree) {
       console.log('\n⚠️  WARNING: Strategies returned different counts!');
@@ -197,9 +273,9 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
     }
     
     // Cross-verify by URL (most reliable unique identifier)
-    const urls1 = new Set(pullRequests1.map(pr => pr.url));
-    const urls2 = new Set(pullRequests2.map(pr => pr.url));
-    const urls3 = new Set(pullRequests3.map(pr => pr.url));
+    const urls1 = new Set(allPullRequests1.map(pr => pr.url));
+    const urls2 = new Set(allPullRequests2.map(pr => pr.url));
+    const urls3 = new Set(allPullRequests3.map(pr => pr.url));
     
     // Find common URLs across all strategies
     const commonUrls = [...urls1].filter(url => urls2.has(url) && urls3.has(url));
@@ -224,9 +300,9 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
       let foundCount = 0;
       let prData = null;
       
-      if (urls1.has(url)) { foundCount++; prData = pullRequests1.find(pr => pr.url === url); }
-      if (urls2.has(url)) { foundCount++; prData = prData || pullRequests2.find(pr => pr.url === url); }
-      if (urls3.has(url)) { foundCount++; prData = prData || pullRequests3.find(pr => pr.url === url); }
+      if (urls1.has(url)) { foundCount++; prData = allPullRequests1.find(pr => pr.url === url); }
+      if (urls2.has(url)) { foundCount++; prData = prData || allPullRequests2.find(pr => pr.url === url); }
+      if (urls3.has(url)) { foundCount++; prData = prData || allPullRequests3.find(pr => pr.url === url); }
       
       // Only include PRs found by at least 2 strategies for quality assurance
       if (foundCount >= 2 && prData) {
