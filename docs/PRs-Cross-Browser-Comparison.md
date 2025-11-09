@@ -4,7 +4,7 @@
 **Test Date:** November 9, 2025  
 **Test Timestamp:** 15:09:44 UTC  
 **Repository:** github.com/appwrite/appwrite  
-**Total PRs Scraped:** 233 (across 10 pages)  
+**Total PRs Scraped:** 232 (across 10 pages)  
 **Pagination Status:** ✅ Fully implemented and verified
 
 ---
@@ -15,7 +15,7 @@
 
 | Browser | File Name | PRs Found | Verification | Status |
 |---------|-----------|-----------|--------------|--------|
-| Chromium | PRs-2025-11-09-15-09-44-chromium.csv | 233 | 3/3 strategies | ✅ Complete (with pagination) |
+| Chromium | PRs-2025-11-09-15-09-44-chromium.csv | 232 | 3/3 strategies | ✅ Complete (with pagination) |
 | Firefox | PRs-2025-11-09-09-12-57-firefox.csv | 25 | 3/3 strategies | ✅ Single page |
 | Webkit | PRs-2025-11-09-09-12-57-webkit.csv | 25 | 3/3 strategies | ✅ Single page |
 | Google Chrome | PRs-2025-11-09-09-12-57-chrome.csv | 25 | 3/3 strategies | ✅ Single page |
@@ -41,12 +41,12 @@
 
 ### ✅ Pagination Feature Successfully Implemented
 
-**Full Pagination (233 PRs):**
-- **Chromium:** Scraped all 233 PRs across 10 pages with 100% verification
+**Full Pagination (232 PRs):**
+- **Chromium:** Scraped all 232 PRs across 10 pages with 100% verification
 - **Implementation:** Automatic page traversal with smart detection
 - **Stopping Condition:** Detects empty pages and terminates gracefully
 - **Execution Time:** ~72 seconds for complete dataset
-- **Data Quality:** 100% verification rate (3/3 strategies agree on all 233 PRs)
+- **Data Quality:** 100% verification rate (3/3 strategies agree on all 232 PRs)
 
 **Single Page Results (25 PRs):**
 - **Firefox, Webkit, Chrome, Edge:** Each successfully scraped first page (25 PRs)
@@ -71,7 +71,7 @@
 
 | Metric | Chromium (Paginated) | Other Browsers (Single Page) |
 |--------|---------------------|------------------------------|
-| PRs Scraped | 233 | 25 |
+| PRs Scraped | 232 | 25 |
 | Pages Traversed | 10 | 1 |
 | Execution Time | ~72s | ~10s |
 | Verification Rate | 100% | 100% |
@@ -89,7 +89,7 @@ Successfully implemented automatic multi-page traversal, expanding data collecti
 Pagination stops intelligently when encountering empty pages, preventing infinite loops and ensuring efficient execution.
 
 ### 3. **Perfect Data Integrity**
-All 233 PRs verified by 3 independent scraping strategies with 100% agreement, demonstrating robust data extraction.
+All 232 PRs verified by 3 independent scraping strategies with 100% agreement, demonstrating robust data extraction.
 
 ### 4. **Cross-Browser Compatible Implementation**
 Scraping logic works identically across all 5 major browsers, showing excellent compatibility and reliability.
@@ -114,12 +114,14 @@ PRs-2025-11-09-15-09-44-edge.csv
 ## Conclusion
 
 ✅ **Pagination Implementation:** Successfully operational  
-✅ **Data Collection:** 233 PRs (9.3x improvement over single page)  
+✅ **Data Collection:** 232 PRs (9.3x improvement over single page)  
 ✅ **Cross-Browser Compatibility:** Verified across 5 browsers  
-✅ **Verification Rate:** 100% (233/233 PRs verified by 3/3 strategies)  
+✅ **Verification Rate:** 100% (232/232 PRs verified by 3/3 strategies)  
 ✅ **Smart Termination:** Automatic detection of pagination end
 
 The GitHub PR scraper with **full pagination** successfully demonstrates the ability to traverse multiple pages and collect complete datasets. The implementation includes smart page detection, triple verification, and cross-browser compatibility.
+
+**Note:** PR counts may vary over time as new PRs are opened or existing ones are closed/merged on the repository.
 
 ---
 
