@@ -60,7 +60,7 @@ test.describe('Test Case 1: Console Error Detection', {
    * Note: The main test uses its own listeners for dual-strategy approach
    */
   test.beforeEach(async ({ page }) => {
-    // Clear error array for fresh start on each test
+    // Clear error array for fresh start on each test  
     consoleErrors = [];
 
     // Listen for console errors (console.error, console.warn type='error', etc.)
@@ -82,7 +82,7 @@ test.describe('Test Case 1: Console Error Detection', {
   });
 
   /**
-   * Main Test: Triple-Strategy Console Error Detection
+   * Main Test: Triple-Strategy Console Error Detection  
    * 
    * This test validates the homepage has no critical console errors using three
    * independent detection strategies that complement each other:
