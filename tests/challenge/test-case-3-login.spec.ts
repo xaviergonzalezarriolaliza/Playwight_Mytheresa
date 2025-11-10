@@ -676,7 +676,7 @@ test.describe('Test Case 3: Login Functionality', {
    * Verifies that login works correctly in CI environments (GitHub Actions, etc.)
    * Detects CI environment and adjusts timeouts accordingly
    * Tests the same strict validation as local tests
-   * /
+   */
   test('should work in CI/GitHub Actions environment', {
     tag: ['@github-actions', '@ci']
   }, async ({ page, baseURL }) => {

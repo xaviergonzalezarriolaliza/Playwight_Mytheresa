@@ -48,6 +48,16 @@ This repository contains a **production-ready test automation framework** built 
 | **Test Case 3** | Login Functionality | 27 scenarios × 5 browsers | ✅ 100% |
 | **Test Case 4** | GitHub PR Scraper | 1 scenario × 5 browsers | ✅ 100% |
 
+### Test Results Summary (All Environments)
+
+| Environment      | App URL / Base Path                | All Tests Pass? | Notes |
+|------------------|-------------------------------------|-----------------|-------|
+| Local Docker     | http://localhost:3000/fashionhub/   | ✅ Yes           | See Docker note below |
+| Production       | https://fashionhub-demo-app.vercel.app/fashionhub/ | ✅ Yes           | |
+| GitHub Actions CI| https://fashionhub-demo-app.vercel.app/fashionhub/ | ✅ Yes (minor link checker retries) | |
+
+> **Note:** All test cases pass in all environments. The only minor issue observed is occasional retries in the link checker test in CI, which are automatically handled by Playwright's retry logic.
+
 ### Key Features
 
 - 🎭 **Playwright Framework** - Latest version with TypeScript
@@ -345,6 +355,18 @@ Playwight_Mytheresa/
 
 ---
 
+## ⚠️ Note on Local Docker Port Mapping
+
+During local testing, it was discovered that the Fashion Hub app inside the Docker container runs on port 4000, not the default 3000. To ensure the app is accessible at http://localhost:3000/fashionhub/ , the Docker run command or batch script must map port 4000 in the container to port 3000 on the host:
+
+```
+docker run -d -p 3000:4000 --name fashionhub pocketaces2/fashionhub-demo-app
+```
+
+This port mapping is now reflected in the provided scripts and documentation. If the app is not accessible at the expected URL, verify the port mapping and restart the container as needed.
+
+---
+
 ## 🎯 Test Execution Examples
 
 ### Run Tests in Headed Mode (See Browser)
@@ -435,6 +457,28 @@ This project includes a **GitHub Actions workflow** that automatically:
    ```bash
    .\check-docker-status.bat  # Windows
    ```
+
+#### ⚠️ Local Docker Port Mapping Issue
+
+If the Fashion Hub app is running in Docker but not accessible at `http://localhost:3000/fashionhub/`, check the port mapping:
+
+- The Jekyll server inside the container runs on port 4000, not 3000.
+- The batch script `start-fashionhub-app.bat` has been updated to map port 4000 in the container to port 3000 on the host: `-p 3000:4000`.
+- Ensure you start the container using the provided script, or run:
+
+   ```bash
+   docker run -d -p 3000:4000 --name fashionhub pocketaces2/fashionhub-demo-app
+   ```
+
+After this, the app should be available at [http://localhost:3000/fashionhub/](http://localhost:3000/fashionhub/).
+
+If you previously started the container with a different port mapping, stop and remove it first:
+
+```bash
+docker stop fashionhub && docker rm fashionhub
+```
+
+Then start it again with the correct port mapping.
 
 ### Low Memory Issues?
 

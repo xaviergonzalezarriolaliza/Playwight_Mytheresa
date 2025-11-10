@@ -1,4 +1,4 @@
-@echo off
+                      @echo off
 REM Start Fashion Hub Demo App Docker Container
 REM Optimized for: AMD A4-5000 APU, 3.44GB RAM
 REM Docker Hub: https://hub.docker.com/r/pocketaces2/fashionhub-demo-app
@@ -24,7 +24,7 @@ docker run -d ^
   --memory="256m" ^
   --memory-swap="512m" ^
   --cpus="1.0" ^
-  -p 3000:3000 ^
+  -p 3000:4000 ^
   pocketaces2/fashionhub-demo-app
 
 IF %ERRORLEVEL% NEQ 0 (

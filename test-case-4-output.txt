@@ -1,0 +1,157 @@
+
+Running 1 test using 1 worker
+
+
+📊 Total Open PRs: 651
+📄 Total Pages to scrape: 27
+⏱️  Estimated time: 7 minutes
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 1/27 (4% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 25)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 25)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 25)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 2/27 (7% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 50)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 50)
+  Strategy 3: Playwright Locator API...
+  Skipped row due to error: Error: locator.textContent: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  Skipped row due to error: Error: locator.count: Target page, context or browser has been closed
+  ✘  1 [chromium] › tests\challenge\test-case-4-github-pr-scraper.spec.ts:14:7 › Test Case 4: GitHub Pull Request Scraper �  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 100)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 100)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 100)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 5/27 (19% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 125)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 125)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 125)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 6/27 (22% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 150)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 150)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 150)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 7/27 (26% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 175)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 175)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 175)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 8/27 (30% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 200)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 200)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 200)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 9/27 (33% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 25 PRs (Total so far: 225)
+  Strategy 2: Class-based Selectors...
+    Found 25 PRs (Total so far: 225)
+  Strategy 3: Playwright Locator API...
+    Found 25 PRs (Total so far: 225)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 10/27 (37% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  Strategy 1: DOM Query with Fallbacks...
+    Found 8 PRs (Total so far: 233)
+  Strategy 2: Class-based Selectors...
+    Found 8 PRs (Total so far: 233)
+  Strategy 3: Playwright Locator API...
+    Found 8 PRs (Total so far: 233)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📄 PAGE 11/27 (41% complete)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ⚠️  No PRs found on page 11, stopping pagination
+
+
+================================================================================
+✅ SCRAPING COMPLETE - All 27 pages processed
+================================================================================
+Strategy 1 Total: 233 PRs
+Strategy 2 Total: 233 PRs
+Strategy 3 Total: 233 PRs
+
+=== TRIPLE VERIFICATION ANALYSIS ===
+All strategies agree: ✅ PERFECT
+  Strategy 1 (data attributes): 233 PRs
+  Strategy 2 (classes):          233 PRs
+  Strategy 3 (Playwright API):   233 PRs
+
+Common PRs across all strategies: 233
+
+Final verified dataset: 233 PRs
+  Verified by 3 strategies: 233
+  Verified by 2 strategies: 0
+
+=== Generating CSV Report ===
+Total PRs in final dataset: 233
+
+=== Pull Requests CSV Report ===
+Browser: chromium
+Total PRs: 233
+CSV file saved to: C:\Users\xavie\Playwight_Mytheresa\test-results\github-prs-chromium-2025-11-09T15-09-44-677Z.csv
+Verification column: Shows how many strategies found each PR (x/3)
+
+First 5 PRs:
+1. Feat: stats sites and functions runtimes and frameworks ✅✅✅
+   Author: lohanidamodar, Created: 2025-11-09T07:19:01Z
+   Verified by: 3/3 strategies
+2. Added error message for the backups route ✅✅✅
+   Author: ArnabChatterjee20k, Created: 2025-11-09T06:43:37Z
+   Verified by: 3/3 strategies
+3. Add ElevenLabs text-to-speech sites template ✅✅✅
+   Author: adityaoberai, Created: 2025-11-07T17:09:32Z
+   Verified by: 3/3 strategies
+4. fix: null validation for optional params ✅✅✅
+   Author: ChiragAgg5k, Created: 2025-11-07T04:20:11Z
+   Verified by: 3/3 strategies
+5. fix: Enable batch mode for issue triage safe-outputs ✅✅✅
+   Author: stnguyen90, Created: 2025-11-06T19:42:46Z
+   Verified by: 3/3 strategies
+
+Verification rate: 100.0% verified by all 3 strategies
+  ✓  1 [chromium] › tests\challenge\test-case-4-github-pr-scraper.spec.ts:14:7 › Test Case 4: GitHub Pull Request Scraper › should fetch open PRs and generate CSV report with dual verification @external @github @api-scraping @independent (1.3m)
+
+  1 passed (1.4m)
