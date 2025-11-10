@@ -1,3 +1,0 @@
-
-Running 5 tests using 5 workers
-
