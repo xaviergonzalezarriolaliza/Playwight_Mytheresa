@@ -3,7 +3,8 @@
 **Candidate:** Xavier Gonzalez Arriola  
 **Date:** November 8, 2025  
 **Framework:** Playwright v1.48.0 with TypeScript  
-**Application:** Fashion Hub E-commerce (GitHub Pages)
+**Application:** Fashion Hub E-commerce (GitHub Pages)  
+**Repository:** [https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa)
 
 ---
 

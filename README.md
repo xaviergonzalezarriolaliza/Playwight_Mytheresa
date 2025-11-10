@@ -1,5 +1,7 @@
 # 🎯 Playwright Test Automation Framework - Mytheresa QA Challenge
 
+> **Repository:** [https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa)
+
 [![Playwright Tests](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/actions/workflows/run-challenge-tests.yml/badge.svg)](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
@@ -277,7 +279,7 @@ Comprehensive documentation is available in the [`docs/`](./docs/) folder:
 
 | Document | Description |
 |----------|-------------|
-| **[📄 Final Challenge Response PDF](./docs/-----technical_challenge_MYTHERESA_RESPONSE-----.pdf)** | Complete challenge solution (1.4 MB) |
+| **[📄 Final Solution PDF](./docs/LUX_QA_CHALLENGE_SOLUTION_XGA.pdf)** | Complete challenge solution (latest, recommended) |
 | [📖 Challenge README](./docs/CHALLENGE_README.md) | Original challenge requirements |
 | [🐳 Docker Guide](./docs/COMPLETE_DOCKER_GUIDE.md) | Complete Docker setup instructions |
 | [🔧 Docker Configuration](./docs/DOCKER_CONFIG.md) | Docker environment configuration |
