@@ -37,7 +37,7 @@ I have successfully implemented a comprehensive test automation framework using 
 - ✅ All 4 test cases fully implemented with triple-strategy validation
 - ✅ Zero flaky tests - robust and reliable execution
 - ✅ Production-quality code with comprehensive documentation
-- ✅ CI/CD ready with GitHub Actions integration
+- ✅ CI/CD ready with [GitHub Actions integration](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/actions)
 
 ---
 
@@ -47,7 +47,7 @@ The Playwright test suite was executed in all required environments:
 
 - **Local Docker container** (http://localhost:3000/fashionhub/)
 - **Production (GitHub Pages/Vercel)** (https://fashionhub-demo-app.vercel.app/fashionhub/)
-- **CI/CD (GitHub Actions)**
+- **CI/CD ([GitHub Actions](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/actions))**
 
 In every environment, all test cases and scenarios passed successfully, demonstrating:
 
@@ -440,7 +440,7 @@ Verification rate: 100.0% verified by all 3 strategies
 
 <div style="page-break-before: always;"></div>
 
-**📊 Detailed Cross-Browser Analysis:** See [PRs-Cross-Browser-Comparison.pdf](PRs-Cross-Browser-Comparison.pdf) for complete comparison across all 5 browsers.
+**📊 Detailed Cross-Browser Analysis:** See [docs/PRs-Cross-Browser-Comparison.pdf](docs/PRs-Cross-Browser-Comparison.pdf) for complete comparison across all 5 browsers.
 
 ### Pagination Statistics
 
@@ -684,9 +684,10 @@ npx playwright show-trace reports/.../trace.zip
 
 ## Appendix: Running Compiled JavaScript Test Cases
 
-By default, Playwright can execute `.ts` (TypeScript) test files directly and will compile them on the fly. However, for environments where only JavaScript is supported or for explicit compilation, all challenge test cases have been compiled to JavaScript and placed in the `CompiledChallengeTestCase` folder.
 
-**How to run the compiled test cases:**
+By default, Playwright can execute `.ts` (TypeScript) test files directly and will compile them on the fly. However, for environments where only JavaScript is supported or for explicit compilation, all challenge test cases have been compiled to JavaScript and placed in the [`CompiledChallengeTestCase`](../CompiledChallengeTestCase/) folder.
+
+**How to run the compiled JavaScript test cases:**
 
 1. Open a terminal in the project root.
 2. Run Playwright using the compiled JavaScript files:
@@ -695,17 +696,28 @@ By default, Playwright can execute `.ts` (TypeScript) test files directly and wi
 npx playwright test CompiledChallengeTestCase/tests/challenge/
 ```
 
-This will execute all challenge test cases from the compiled `.js` files.
+This will execute all challenge test cases from the compiled `.js` files in [`CompiledChallengeTestCase/tests/challenge/`](../CompiledChallengeTestCase/tests/challenge/).
+
+**How to run the original TypeScript test cases:**
+
+1. Open a terminal in the project root.
+2. Run Playwright using the original `.ts` files:
+
+```bash
+npx playwright test tests/challenge/
+```
+
+This will execute all challenge test cases from the original `.ts` files in [`tests/challenge/`](../tests/challenge/).
 
 **Note:**
-- Playwright usually compiles `.ts` files automatically, so this step is only needed for environments that require precompiled JavaScript.
-- The compiled files are located in `CompiledChallengeTestCase/tests/challenge/`.
+- Playwright usually compiles `.ts` files automatically, so using the compiled `.js` files is only needed for environments that require precompiled JavaScript.
+- The compiled files are located in [`CompiledChallengeTestCase/tests/challenge/`](../CompiledChallengeTestCase/tests/challenge/).
 
 ---
 
 ## Appendix: Intensive Bug Hunting Results
 
-In addition to the main solution, see `BUG_HUNTING_EXECUTIVE_SUMMARY.md` for a detailed breakdown of exploratory testing, findings, and recommendations.
+In addition to the main solution, see [`docs/BUG_HUNTING_EXECUTIVE_SUMMARY.md`](docs/BUG_HUNTING_EXECUTIVE_SUMMARY.md) for a detailed breakdown of exploratory testing, findings, and recommendations.
 
 **Highlights:**
 - 170 scenarios executed (including deep exploratory and edge cases)
