@@ -693,7 +693,7 @@ test.describe('Test Case 3: Login Functionality', {
       nodeVersion: process.version,
     };
     
-    console.log(`[CI Environment] ${JSON.stringify(ciInfo, null, 2)}`);
+    console.log(`[CI Environment] ${JSON.stringify(ciInfo, null, 2)}`); 
     console.log(`[${browserName}] Running in ${isCI ? 'CI' : 'Local'} environment`);
     
     // Step 2: Navigate and prepare form

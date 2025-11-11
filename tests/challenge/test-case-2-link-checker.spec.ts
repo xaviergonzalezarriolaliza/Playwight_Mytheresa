@@ -35,7 +35,7 @@ test.describe('Test Case 2: Link Status Code Verification', () => {
       
       // Skip CSS, JS, and image files
       if (link.match(/\.(css|js|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf)(\?|$)/i)) {
-        return false;
+        return false; 
       }
       
       try {

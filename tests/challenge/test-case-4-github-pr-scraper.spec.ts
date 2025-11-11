@@ -46,7 +46,7 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
           totalPRs = visiblePRs;
         }
       } catch {
-        // Fallback: just scrape the first page
+        // Fallback: just scrape the first page 
         totalPRs = 25;
         console.log(`⚠️  Could not determine total, will scrape first page only`);
       }
