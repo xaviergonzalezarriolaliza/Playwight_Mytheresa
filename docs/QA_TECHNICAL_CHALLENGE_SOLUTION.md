@@ -157,6 +157,20 @@ Implemented three complementary detection strategies:
 
 ---
 
+### How to Run This Test in Headed Mode (Local Example)
+
+To visually observe what the test is doing, you can run this test in headed mode:
+
+```bash
+npx playwright test tests/challenge/test-case-1-console-errors.spec.ts --headed --reporter=list
+```
+
+This will open a browser window so you can see the navigation, error overlays, and any console/network errors as they occur.
+
+**Benefit:** Headed mode is invaluable for debugging, as you can watch the test interact with the page in real time and spot UI issues or unexpected behaviors that are hard to catch in headless mode.
+
+---
+
 ## Test Case 2: Link Status Code Verification
 
 ### Objective
@@ -284,6 +298,21 @@ Slowest: Edge (1,300ms)
 - **UX:** Error messages displayed appropriately for invalid inputs
 
 ### Pass Rate: 100% (135/135 tests)
+
+---
+
+### How to Run This Test in Headed Mode (Local Example)
+
+To visually observe the login test in action, run it in headed mode:
+
+```bash
+npx playwright test tests/challenge/test-case-3-login.spec.ts --headed --reporter=list
+```
+
+**Why Headed Mode?**
+- Lets you see every step: form filling, button clicks, error messages, and page transitions.
+- Great for debugging tricky login scenarios, UI glitches, or timing issues.
+- You can pause, inspect, and interact with the browser while the test runs.
 
 ---
 
@@ -438,9 +467,10 @@ Verification rate: 100.0% verified by all 3 strategies
 **Complete dataset:** <span style="font-size: 26px; font-weight: bold; color: #000;">232</span> PRs total (rows 31-232 omitted for brevity)
 **CSV file:** `test-results/github-prs-chromium-2025-11-09T14-11-59-135Z.csv`
 
-<div style="page-break-before: always;"></div>
 
-**📊 Detailed Cross-Browser Analysis:** See [docs/PRs-Cross-Browser-Comparison.pdf](docs/PRs-Cross-Browser-Comparison.pdf) for complete comparison across all 5 browsers.
+
+**📊 Detailed Cross-Browser Analysis:**
+For the complete comparison across all 5 browsers, see the PDF report: [PRs-Cross-Browser-Comparison.pdf](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/raw/main/docs/PRs-Cross-Browser-Comparison.pdf).
 
 ### Pagination Statistics
 
@@ -452,8 +482,17 @@ Verification rate: 100.0% verified by all 3 strategies
 - **Verification Rate:** 100% - All <span style="font-size: 24px; font-weight: bold; color: #000;">233</span> PRs verified by 3/3 strategies
 - **Data Quality:** Zero disagreements between strategies
 
+
+---
+
+## Appendix: PRs Table and CSV Output
+
+### PRs Table (First 30 Rows)
+
+See [PRs-Cross-Browser-Comparison.pdf](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/raw/main/docs/PRs-Cross-Browser-Comparison.pdf) for the full table.
+
 ### CSV Output Format
-```csv
+```
 PR Name,Created Date,Author,PR URL,Verified By
 "Feat: stats sites and functions runtimes and frameworks",2025-11-09T07:19:01Z,lohanidamodar,https://github.com/appwrite/appwrite/pull/10786,3/3 strategies
 ```
@@ -685,7 +724,9 @@ npx playwright show-trace reports/.../trace.zip
 ## Appendix: Running Compiled JavaScript Test Cases
 
 
-By default, Playwright can execute `.ts` (TypeScript) test files directly and will compile them on the fly. However, for environments where only JavaScript is supported or for explicit compilation, all challenge test cases have been compiled to JavaScript and placed in the [`CompiledChallengeTestCase`](../CompiledChallengeTestCase/) folder.
+
+By default, Playwright can execute `.ts` (TypeScript) test files directly and will compile them on the fly. However, for environments where only JavaScript is supported or for explicit compilation, all challenge test cases have been compiled to JavaScript and placed in the [`tests/challenge/CompiledChallengeTestCase`](../tests/challenge/CompiledChallengeTestCase/) folder.
+
 
 **How to run the compiled JavaScript test cases:**
 
@@ -693,10 +734,10 @@ By default, Playwright can execute `.ts` (TypeScript) test files directly and wi
 2. Run Playwright using the compiled JavaScript files:
 
 ```bash
-npx playwright test CompiledChallengeTestCase/tests/challenge/
+npx playwright test tests/challenge/CompiledChallengeTestCase/tests/challenge/
 ```
 
-This will execute all challenge test cases from the compiled `.js` files in [`CompiledChallengeTestCase/tests/challenge/`](../CompiledChallengeTestCase/tests/challenge/).
+This will execute all challenge test cases from the compiled `.js` files in [`tests/challenge/CompiledChallengeTestCase/tests/challenge/`](../tests/challenge/CompiledChallengeTestCase/tests/challenge/).
 
 **How to run the original TypeScript test cases:**
 
@@ -711,15 +752,15 @@ This will execute all challenge test cases from the original `.ts` files in [`te
 
 **Note:**
 - Playwright usually compiles `.ts` files automatically, so using the compiled `.js` files is only needed for environments that require precompiled JavaScript.
-- The compiled files are located in [`CompiledChallengeTestCase/tests/challenge/`](../CompiledChallengeTestCase/tests/challenge/).
+- The compiled files are now located in [`tests/challenge/CompiledChallengeTestCase/tests/challenge/`](../tests/challenge/CompiledChallengeTestCase/tests/challenge/).
 
 ---
 
 ## Appendix: Intensive Bug Hunting Results
 
-In addition to the main solution, see [`docs/BUG_HUNTING_EXECUTIVE_SUMMARY.md`](docs/BUG_HUNTING_EXECUTIVE_SUMMARY.md) for a detailed breakdown of exploratory testing, findings, and recommendations.
+In addition to the main solution, see [BUG_HUNTING_EXECUTIVE_SUMMARY.md](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/blob/main/docs/BUG_HUNTING_EXECUTIVE_SUMMARY.md) for a detailed breakdown of exploratory testing, findings, and recommendations.
 
 **Highlights:**
 - 170 scenarios executed (including deep exploratory and edge cases)
 - 23 issues found (0 critical/high, mostly minor data/SEO/UX)
-- See full report: [docs/BUG_HUNTING_EXECUTIVE_SUMMARY.pdf](docs/BUG_HUNTING_EXECUTIVE_SUMMARY.pdf)
+- See full report: [BUG_HUNTING_EXECUTIVE_SUMMARY.pdf](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/raw/main/docs/BUG_HUNTING_EXECUTIVE_SUMMARY.pdf)
