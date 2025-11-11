@@ -6,9 +6,13 @@ const marked = require('marked');
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage();
-  
+
+  // Support CLI args: node generate-pdf.js [input.md] [output.pdf]
+  const inputFile = process.argv[2] || 'docs/QA_TECHNICAL_CHALLENGE_SOLUTION.md';
+  const outputFile = process.argv[3] || 'docs/LUX_QA_CHALLENGE_SOLUTION_XGA.pdf';
+
   // Read the markdown and convert to HTML
-  const markdown = fs.readFileSync('docs/QA_TECHNICAL_CHALLENGE_SOLUTION.md', 'utf-8');
+  const markdown = fs.readFileSync(inputFile, 'utf-8');
   
   // Convert markdown tables to ASCII-art tables in <pre> blocks
   function mdTableToAscii(md) {
@@ -149,18 +153,14 @@ const marked = require('marked');
   
   await page.setContent(fullHtml);
   
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').split('T')[0] + '_' + 
-                     new Date().toTimeString().split(' ')[0].replace(/:/g, '-');
-  const filename = `TEST_REPORT_${timestamp}_with-screenshots.pdf`;
-  
+
   await page.pdf({
-    path: filename,
+    path: outputFile,
     format: 'A4',
     margin: { top: '20mm', right: '20mm', bottom: '20mm', left: '20mm' },
     printBackground: true
   });
-  
-  console.log(`✅ PDF generated: ${filename}`);
+  console.log(`✅ PDF generated: ${outputFile}`);
   
   await browser.close();
 })();

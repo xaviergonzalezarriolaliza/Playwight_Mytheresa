@@ -1,12 +1,16 @@
 # QA Technical Challenge - Solution Report
 
-**Candidate:** Xavier Gonzalez Arriola  
+
+<span style="font-size:1.5em;font-weight:bold;color:#111;">Xavier Gonzalez Arriola</span>
+
+<span style="font-size:1em;color:#222;">https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa</span>
+
 **Date:** November 8, 2025  
-**Framework:** Playwright v1.48.0 with TypeScript  
-**Application:** Fashion Hub E-commerce (GitHub Pages)  
-**Repository:** [https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa)
+**Framework:** Playwright v1.48.0 with TypeScript
 
 ---
+
+
 
 # Dear Hiring Team,
 
@@ -673,3 +677,14 @@ npx playwright show-trace reports/.../trace.zip
 **Framework Version:** Playwright 1.48.0  
 **Node Version:** v24.11.0  
 **Total Test Duration:** 2 minutes 30 seconds
+
+---
+
+## Appendix: Intensive Bug Hunting Results
+
+In addition to the main solution, see `BUG_HUNTING_EXECUTIVE_SUMMARY.md` for a detailed breakdown of exploratory testing, findings, and recommendations.
+
+**Highlights:**
+- 170 scenarios executed (including deep exploratory and edge cases)
+- 23 issues found (0 critical/high, mostly minor data/SEO/UX)
+- See full report: [docs/BUG_HUNTING_EXECUTIVE_SUMMARY.pdf](docs/BUG_HUNTING_EXECUTIVE_SUMMARY.pdf)
