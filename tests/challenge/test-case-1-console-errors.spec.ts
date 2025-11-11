@@ -15,6 +15,24 @@ test.describe('Test Case 1: Console Error Detection', {
    * @param message - The error message to check
    * @returns true if the error is benign and should be ignored
    */
+
+  /**
+   * ---
+   * \u25B6\uFE0F **Running This Test in Headed Mode (Local Example)**
+   *
+   * To visually observe what the test is doing, you can run this test in headed mode:
+   *
+   *     npx playwright test tests/challenge/test-case-1-console-errors.spec.ts --headed --reporter=list
+   *
+   * This will open a browser window so you can see the navigation, error overlays, and any console/network errors as they occur.
+   *
+   * **Benefit:** Headed mode is invaluable for debugging, as you can watch the test interact with the page in real time and spot UI issues or unexpected behaviors that are hard to catch in headless mode.
+   *
+   * **Example Screenshot:**
+   * ![Headed Mode Screenshot - Console Error Detection](../report-screenshots/test-case-1-headed-example.png)
+   *
+   * ---
+   */
   function isBenignConsoleError(message: string): boolean {
     const m = message.toLowerCase(); // Case-insensitive matching
     return (
@@ -58,10 +76,26 @@ test.describe('Test Case 1: Console Error Detection', {
    * beforeEach hook - Runs before each test in this suite
    * Sets up basic error listeners for validation in the second test
    * Note: The main test uses its own listeners for dual-strategy approach
+  */
+  /**
+   * ---
+   * \u25B6\uFE0F **How to Run in Headed Mode (Local Example)**
+   *
+   *     npx playwright test tests/challenge/test-case-3-login.spec.ts --headed --reporter=list
+   *
+   * **Why Headed Mode?**
+   * - Lets you see every step: form filling, button clicks, error messages, and page transitions.
+   * - Great for debugging tricky login scenarios, UI glitches, or timing issues.
+   * - You can pause, inspect, and interact with the browser while the test runs.
+   *
+   * **Example Screenshot:**
+   * ![Headed Mode Screenshot - Login Test](../report-screenshots/test-case-3-headed-example.png)
+   *
+   * --- 
    */
   test.beforeEach(async ({ page }) => {
     // Clear error array for fresh start on each test  
-    consoleErrors = [];
+    consoleErrors = []; 
 
     // Listen for console errors (console.error, console.warn type='error', etc.)
     page.on('console', msg => {

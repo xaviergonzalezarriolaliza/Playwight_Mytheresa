@@ -675,7 +675,7 @@ test.describe('Test Case 3: Login Functionality', {
    * TEST 23: CI/CD Environment Compatibility
    * Verifies that login works correctly in CI environments (GitHub Actions, etc.)
    * Detects CI environment and adjusts timeouts accordingly
-   * Tests the same strict validation as local tests
+   * Tests the same strict validation as local tests 
    */
   test('should work in CI/GitHub Actions environment', {
     tag: ['@github-actions', '@ci']
@@ -693,7 +693,7 @@ test.describe('Test Case 3: Login Functionality', {
       nodeVersion: process.version,
     };
     
-    console.log(`[CI Environment] ${JSON.stringify(ciInfo, null, 2)}`); 
+    console.log(`[CI Environment] ${JSON.stringify(ciInfo, null, 2)}`);  
     console.log(`[${browserName}] Running in ${isCI ? 'CI' : 'Local'} environment`);
     
     // Step 2: Navigate and prepare form

@@ -40,11 +40,11 @@ test.describe('Test Case 4: GitHub Pull Request Scraper', {
         const hasNextPage = await page.locator('a[rel="next"]').count() > 0;
         if (hasNextPage) {
           // GitHub typically shows 25 per page
-          totalPRs = visiblePRs * 10; // Rough estimate
+          totalPRs = visiblePRs * 10; // Rough estimate 
           console.log(`⚠️  Could not find exact count, estimating ~${totalPRs} PRs`);
         } else {
           totalPRs = visiblePRs;
-        }
+        } 
       } catch {
         // Fallback: just scrape the first page 
         totalPRs = 25;
