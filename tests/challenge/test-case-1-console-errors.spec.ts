@@ -154,7 +154,7 @@ test.describe('Test Case 1: Console Error Detection', {
     page.on('response', responseHandler);
 
     // ============================================================================
-    // STRATEGY 3: Resource & Performance Error Analysis (Cross-Browser)
+    // STRATEGY 3: Resource & Performance Error Analysis (Cross-Browser
     // ============================================================================
     // Detects: Resource loading failures, slow resources, and navigation timing issues
     // Works on: All browsers (Chromium, Firefox, WebKit)
