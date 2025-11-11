@@ -55,13 +55,14 @@ In every environment, all test cases and scenarios passed successfully, demonstr
 - Robustness of the test automation framework
 - No environment-specific failures or flakiness
 
+
 ### Environment Test Results Summary
 
 | Environment      | App URL / Base Path                | All Tests Pass? | Notes |
 |------------------|-------------------------------------|-----------------|-------|
 | Local Docker     | http://localhost:3000/fashionhub/   | ✅ Yes           | |
 | Production       | https://fashionhub-demo-app.vercel.app/fashionhub/ | ✅ Yes           | |
-| GitHub Actions CI| https://fashionhub-demo-app.vercel.app/fashionhub/ | ✅ Yes           | Minor link checker retries auto-resolved |
+| GitHub Actions CI| https://fashionhub-demo-app.vercel.app/fashionhub/ <br>CI/CD: [View Actions & Reports](https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa/actions) | ✅ Yes           | Minor link checker retries auto-resolved |
 
 > **Conclusion:** The test suite is fully portable and reliable, providing 100% pass rates and identical results in local, production, and CI environments. This ensures confidence in both the application and the automation approach.
 

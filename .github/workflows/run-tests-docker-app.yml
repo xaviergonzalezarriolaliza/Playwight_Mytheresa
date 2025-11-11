@@ -36,17 +36,17 @@ jobs:
             echo "Falling back to testing production site instead."
             exit 0
           }
-          
+
           echo "Waiting for app to be ready..."
           for i in {1..30}; do
-            if curl -f http://localhost:3000 2>/dev/null; then
+            if curl -f http://localhost:3000/fashionhub/ 2>/dev/null; then
               echo "Fashion Hub app is ready!"
               exit 0
             fi
             echo "Attempt $i/30: App not ready yet..."
             sleep 2
           done
-          
+
           echo "App did not become ready in time"
           docker logs fashionhub-app
           exit 1
