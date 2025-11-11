@@ -5,7 +5,7 @@
 
 <span style="font-size:1em;color:#222;">https://github.com/xaviergonzalezarriolaliza/Playwight_Mytheresa</span>
 
-**Date:** November 8, 2025  
+**Date:** November 11, 2025  
 **Framework:** Playwright v1.48.0 with TypeScript
 
 ---
@@ -674,10 +674,32 @@ npx playwright show-trace reports/.../trace.zip
 
 ---
 
-**Report Generated:** November 8, 2025  
+**Report Generated:** November 11, 2025  
 **Framework Version:** Playwright 1.48.0  
 **Node Version:** v24.11.0  
 **Total Test Duration:** 2 minutes 30 seconds
+
+---
+
+
+## Appendix: Running Compiled JavaScript Test Cases
+
+By default, Playwright can execute `.ts` (TypeScript) test files directly and will compile them on the fly. However, for environments where only JavaScript is supported or for explicit compilation, all challenge test cases have been compiled to JavaScript and placed in the `CompiledChallengeTestCase` folder.
+
+**How to run the compiled test cases:**
+
+1. Open a terminal in the project root.
+2. Run Playwright using the compiled JavaScript files:
+
+```bash
+npx playwright test CompiledChallengeTestCase/tests/challenge/
+```
+
+This will execute all challenge test cases from the compiled `.js` files.
+
+**Note:**
+- Playwright usually compiles `.ts` files automatically, so this step is only needed for environments that require precompiled JavaScript.
+- The compiled files are located in `CompiledChallengeTestCase/tests/challenge/`.
 
 ---
 
