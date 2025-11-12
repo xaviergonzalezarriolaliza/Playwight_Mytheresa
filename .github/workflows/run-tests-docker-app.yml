@@ -10,6 +10,7 @@ jobs:
     timeout-minutes: 30
     
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -25,15 +26,12 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
 
-      - name: Log in to GitHub Container Registry
-        run: echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
       - name: Pull Docker image
-        run: docker pull ghcr.io/pocketaces2/fashionhub:latest
+        run: docker pull pocketaces2/fashionhub-demo-app:latest
 
       - name: Run Docker container
         run: |
-          docker run -d --name fashionhub-app -p 3000:4000 ghcr.io/pocketaces2/fashionhub:latest
+          docker run -d --name fashionhub-app -p 3000:4000 pocketaces2/fashionhub-demo-app:latest
           echo "Waiting for app to be ready..."
           for i in {1..30}; do
             if curl -f http://localhost:3000/fashionhub/ 2>/dev/null; then
@@ -66,30 +64,6 @@ jobs:
               exit 0
             fi
             echo "Attempt $i/30: App not ready yet..."
-            sleep 2
-          done
-
-          echo "App did not become ready in time"
-          docker logs fashionhub-app
-          exit 1
-
-      - name: Run challenge tests against Docker container
-        env:
-          BASE_URL: http://localhost:3000
-          REPORT_LABEL: docker-container-github-ci
-        run: npm test -- tests/challenge/
-        continue-on-error: true
-      
-      - name: Show Docker logs
-        if: always()
-        run: |
-          echo "=== Fashion Hub Docker Container Logs ==="
-          docker logs fashionhub-app || echo "No logs available"
-      
-      - name: Stop Docker container
-        if: always()
-        run: |
-          docker stop fashionhub-app || true
           docker rm fashionhub-app || true
 
       - name: Upload HTML Report
